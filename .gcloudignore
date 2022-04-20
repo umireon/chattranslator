@@ -1,0 +1,17 @@
+.devcontainer/
+dist/
+src/
+node_modules/
+.editorconfig
+.eslintrc.json
+.firebaserc
+.gcloudignore
+.gitignore
+cloudbuild.yaml
+firebase.json
+jest.config.js
+LICENSE
+openapi2-functions.yaml
+README.md
+tsconfig.json
+*.ts
