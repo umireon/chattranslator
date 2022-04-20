@@ -1,8 +1,4 @@
-import { FormData, formDataToBlob } from 'formdata-polyfill/esm.min.js'
-
-import { Blob } from 'fetch-blob'
 import type { HttpFunction } from '@google-cloud/functions-framework'
-import { TextToSpeechClient } from '@google-cloud/text-to-speech'
 import { TranslationServiceClient } from '@google-cloud/translate'
 import { http } from '@google-cloud/functions-framework'
 
@@ -28,20 +24,27 @@ const handleCors: HttpFunction = (req, res) => {
   return true
 }
 
-interface DetectLanguageOption {
-  projectId: string
-  content: string
+interface TranslateLanguageGlossaryConfig {
+  glossary: string
+  ignoreCase?: boolean
 }
 
-const detectLanguage = async (client: TranslationServiceClient, { projectId, content }: DetectLanguageOption) => {
-  const [response] = await client.detectLanguage({
-    content,
-    parent: `projects/${projectId}/locations/global`
+interface TranslateLanguageOption {
+  text: string
+  glossaryConfig?: TranslateLanguageGlossaryConfig
+  projectId: string
+  targetLanguageCode: string
+}
+
+const translateLanguage = async (client: TranslationServiceClient, { glossaryConfig, projectId, targetLanguageCode, text }: TranslateLanguageOption) => {
+  const [response] = await client.translateText({
+    contents: [text],
+    glossaryConfig,
+    parent: `projects/${projectId}/locations/global`,
+    targetLanguageCode
   })
-  const { languages } = response
-  if (!languages) return 'und'
-  const [{ languageCode }] = languages
-  return languageCode || 'und'
+  const [{ translatedText }] = response.translations
+  return translatedText
 }
 
 http('text-to-speech', async (req, res) => {
@@ -60,34 +63,12 @@ http('text-to-speech', async (req, res) => {
     res.status(400).send('Invalid text')
     return
   }
-  if (!validateVoice(req.query.voice)) {
-    res.status(400).send('Invalid voice')
-    return
-  }
-  const { text, voice } = req.query
+  const { text } = req.query
 
-  // Detect language
+  // Translate text
   const translationClient = new TranslationServiceClient()
-  const language = await detectLanguage(translationClient, { content: text, projectId: PROJECT_ID })
-
-  // Synthesize speech
-  const textToSpeechClient = new TextToSpeechClient()
-  const [response] = await textToSpeechClient.synthesizeSpeech({
-    audioConfig: { audioEncoding: 'MP3' },
-    input: { text },
-    voice: getVoice(voice, language)
-  })
-  const { audioContent } = response
-  if (!audioContent) throw new Error('Invalid response')
+  const translatedText = await translateLanguage(translationClient, { projectId: PROJECT_ID, targetLanguageCode: 'en', text })
 
   // Compose response
-  const formData = new FormData()
-  formData.append('audioContent', new Blob([coarseIntoUint8Array(audioContent)], {
-    type: 'audio/mpeg'
-  }))
-  formData.append('language', language)
-  const blob = formDataToBlob(formData)
-  const arrayBuffer = await blob.arrayBuffer()
-  res.set('Content-Type', blob.type)
-  res.send(Buffer.from(arrayBuffer))
+  res.send({translatedText})
 })
