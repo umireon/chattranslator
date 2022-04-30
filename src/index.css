@@ -1,0 +1,33 @@
+@import url("variables.css");
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background: var(--main-bg-color);
+  margin: 0;
+}
+
+header h1 {
+  color: var(--main-fg-color);
+  font-family: "Roboto", sans-serif;
+  font-size: 17vw;
+  margin: 0;
+  padding: 100px 0;
+  text-align: center;
+}
+
+footer {
+  background: var(--main-fg-color);
+  padding: 30px 0;
+}
+
+footer ul {
+  list-style: none;
+}
+
+footer ul a {
+  color: white;
+}
