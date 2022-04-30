@@ -47,7 +47,7 @@ const translateLanguage = async (client: TranslationServiceClient, { glossaryCon
   return translatedText
 }
 
-http('text-to-speech', async (req, res) => {
+http('translate-text', async (req, res) => {
   if (!handleCors(req, res)) return
 
   // Validate environment
@@ -70,5 +70,5 @@ http('text-to-speech', async (req, res) => {
   const translatedText = await translateLanguage(translationClient, { projectId: PROJECT_ID, targetLanguageCode: 'en', text })
 
   // Compose response
-  res.send({translatedText})
+  res.send({ translatedText })
 })
