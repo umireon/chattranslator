@@ -3,7 +3,7 @@ export interface AppContext {
 }
 
 export const DEFAULT_CONTEXT: AppContext = {
-  translateTextEndpoint: 'a',
+  translateTextEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev',
 } as const
 
 export const firebaseConfig = {
