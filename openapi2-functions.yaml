@@ -1,0 +1,53 @@
+swagger: '2.0'
+info:
+  title: 'chattranslatorbot backend'
+  description: 'API of chat message translator on Twitch for OBS and so on.'
+  version: '0.1.0'
+schemes:
+  - 'https'
+produces:
+  - 'application/json'
+securityDefinitions:
+  firebase:
+    authorizationUrl: ''
+    flow: 'implicit'
+    type: 'oauth2'
+    x-google-issuer: 'https://securetoken.google.com/chattranslatorbot'
+    x-google-jwks_uri: 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com'
+    x-google-audiences: 'chattranslatorbot'
+paths:
+  /translate-text:
+    get:
+      summary: 'Translate text'
+      operationId: 'translate-text'
+      x-google-backend:
+        address: 'https://translate-text-h7nyl2mmoq-uc.a.run.app'
+      security:
+        - firebase: []
+      parameters:
+        - in: 'query'
+          name: 'text'
+          type: 'string'
+        - in: 'query'
+          name: 'targetLanguageCode'
+          type: 'string'
+      responses:
+        '200':
+          description: 'A successful response'
+          schema:
+            type: 'object'
+            properties:
+              audioContent:
+                type: 'string'
+              language:
+                type: 'string'
+        '204':
+          description: 'Keep Alive'
+    options:
+      summary: 'Translate text Preflight'
+      operationId: 'translate-text-preflight'
+      x-google-backend:
+        address: 'https://translate-text-h7nyl2mmoq-uc.a.run.app'
+      responses:
+        '204':
+          description: 'A successful response'
