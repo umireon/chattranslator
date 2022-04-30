@@ -26,15 +26,15 @@ steps:
       - --trigger-http
     waitFor: ['npm run build-functions']
 
-  - name: 'node:16-bullseye-slim'
-    args:
-      - npm
-      - run
-      - build
-    waitFor: ['npm ci']
-    id: 'npm run build'
-  - name: 'gcr.io/$PROJECT_ID/firebase'
-    args:
-      - deploy
-      - --only=hosting
-    waitFor: ['npm run build']
+  # - name: 'node:16-bullseye-slim'
+  #   args:
+  #     - npm
+  #     - run
+  #     - build
+  #   waitFor: ['npm ci']
+  #   id: 'npm run build'
+  # - name: 'gcr.io/$PROJECT_ID/firebase'
+  #   args:
+  #     - deploy
+  #     - --only=hosting
+  #   waitFor: ['npm run build']
