@@ -1,7 +1,7 @@
 {
-  "name": "chattalker",
+  "name": "chattranslatorbot",
   "version": "0.1.0",
-  "description": "Chat message talker on Twitch and YouTube for OBS and so on.",
+  "description": "Chat message translator on Twitch for OBS and so on.",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -9,7 +9,6 @@
     "preview": "vite preview",
     "build-functions": "esbuild --outdir=. constants.ts index.ts",
     "lint": "eslint --ext .ts,.svelte src *.ts",
-    "start": "parcel src/*.html",
     "functions-framework": "functions-framework",
     "test": "jest",
     "tsc": "tsc"
@@ -29,6 +28,7 @@
     "@tsconfig/svelte": "^3.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "^27.4.1",
+    "@types/node": "^17.0.30",
     "@types/toastify-js": "^1.11.0",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
