@@ -4,9 +4,9 @@ import type { HttpFunction } from '@google-cloud/functions-framework'
 import { TranslationServiceClient } from '@google-cloud/translate'
 import fetch from 'node-fetch'
 import { getAuth } from 'firebase-admin/auth'
+import { getFirestore } from 'firebase-admin/firestore'
 import { http } from '@google-cloud/functions-framework'
 import { initializeApp } from 'firebase-admin/app'
-import { getFirestore } from 'firebase-admin/firestore'
 
 const handleCors: HttpFunction = (req, res) => {
   const { origin } = req.headers
