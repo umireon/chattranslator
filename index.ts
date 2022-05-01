@@ -1,5 +1,8 @@
+import type { AppContext } from './constants.js'
+import { DEFAULT_CONTEXT } from './constants.js'
 import type { HttpFunction } from '@google-cloud/functions-framework'
 import { TranslationServiceClient } from '@google-cloud/translate'
+import fetch from 'node-fetch'
 import { getAuth } from 'firebase-admin/auth'
 import { http } from '@google-cloud/functions-framework'
 import { initializeApp } from 'firebase-admin/app'
@@ -90,6 +93,25 @@ http('translate-text', async (req, res) => {
   // Compose response
   res.send({ translatedText })
 })
+
+export const getTwitchLogin = async (
+  { twitchClientId }: AppContext,
+  token: string
+): Promise<string> => {
+  const response = await fetch('https://api.twitch.tv/helix/users', {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Client-Id': twitchClientId,
+    },
+  })
+  if (!response.ok) throw new Error('Twitch login could not be retrieved!')
+  const json: unknown = await response.json()
+  if (!validateTwitchUsersResponse(json)) throw new Error('Invalid response')
+  const {
+    data: [{ login }],
+  } = json
+  return login
+}
 
 http('', async (req, res) => {
   if (!handleCors(req, res)) return

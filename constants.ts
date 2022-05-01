@@ -1,9 +1,11 @@
 export interface AppContext {
   readonly translateTextEndpoint: string
+  readonly twitchClientId: string
 }
 
 export const DEFAULT_CONTEXT: AppContext = {
   translateTextEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev',
+  twitchClientId: '',
 } as const
 
 export const firebaseConfig = {

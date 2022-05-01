@@ -60,7 +60,8 @@
   "dependencies": {
     "@google-cloud/functions-framework": "^3.0.0",
     "@google-cloud/translate": "^6.3.1",
-    "firebase-admin": "^10.1.0"
+    "firebase-admin": "^10.1.0",
+    "node-fetch": "^3.2.4"
   },
   "type": "module"
 }
