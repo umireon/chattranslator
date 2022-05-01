@@ -94,6 +94,21 @@ http('translate-text', async (req, res) => {
   res.send({ translatedText })
 })
 
+export interface TwitchUsersData {
+  readonly login: string
+}
+
+export interface TwitchUsersResponse {
+  readonly data: TwitchUsersData[]
+}
+
+export const validateTwitchUsersResponse = (
+  arg: any
+): arg is TwitchUsersResponse => {
+  if (typeof arg === 'undefined' || arg === null) return false
+  return Array.isArray(arg.data)
+}
+
 export const getTwitchLogin = async (
   { twitchClientId }: AppContext,
   token: string
@@ -113,8 +128,10 @@ export const getTwitchLogin = async (
   return login
 }
 
-http('', async (req, res) => {
+http('set-twitch-login-to-user', async (req, res) => {
   if (!handleCors(req, res)) return
+
+  const db = getFirestore(app)
 
   // Validate query
   if (typeof req.query.token !== 'string') {
@@ -126,6 +143,12 @@ http('', async (req, res) => {
     return
   }
   const { uid, token } = req.query
+
+  const login = await getTwitchLogin(DEFAULT_CONTEXT, token)
+
+  await db.collection('userTwitchLogin').doc(uid).set({ login })
+
+  res.status(204).send('')
 })
 
 http('authenticate-with-token', async (req, res) => {
