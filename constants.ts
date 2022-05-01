@@ -1,5 +1,6 @@
 export interface AppContext {
   readonly authenticateWithTokenEndpoint: string
+  readonly setTwitchLoginToUserEndpoint: string
   readonly textToSpeechEndpoint: string
   readonly translateTextEndpoint: string
   readonly twitchClientId: string
@@ -9,9 +10,10 @@ export interface AppContext {
 }
 
 export const DEFAULT_CONTEXT: AppContext = {
-  authenticateWithTokenEndpoint: '',
+  authenticateWithTokenEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev/authenticate-with-token',
+  setTwitchLoginToUserEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev/set-twitch-login-to-user',
   textToSpeechEndpoint: '',
-  translateTextEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev',
+  translateTextEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev/translate-text',
   twitchClientId: '',
   youtubeCallbackEndpoint: '',
   youtubeClientId: '',
