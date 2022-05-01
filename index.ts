@@ -57,6 +57,7 @@ const translateLanguage = async (
     parent: `projects/${projectId}/locations/global`,
     targetLanguageCode,
   })
+  if (!Array.isArray(response.translations)) throw new Error('Invalid response')
   const [{ translatedText }] = response.translations
   return translatedText
 }

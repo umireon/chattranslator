@@ -1,11 +1,21 @@
 export interface AppContext {
+  readonly authenticateWithTokenEndpoint: string
+  readonly textToSpeechEndpoint: string
   readonly translateTextEndpoint: string
   readonly twitchClientId: string
+  readonly youtubeCallbackEndpoint: string
+  readonly youtubeClientId: string
+  readonly youtubeRefreshEndpoint: string
 }
 
 export const DEFAULT_CONTEXT: AppContext = {
+  authenticateWithTokenEndpoint: '',
+  textToSpeechEndpoint: '',
   translateTextEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev',
   twitchClientId: '',
+  youtubeCallbackEndpoint: '',
+  youtubeClientId: '',
+  youtubeRefreshEndpoint: '',
 } as const
 
 export const firebaseConfig = {
