@@ -94,7 +94,6 @@ http('translate-text', async (req, res) => {
 http('', async (req, res) => {
   if (!handleCors(req, res)) return
 
-
   // Validate query
   if (typeof req.query.token !== 'string') {
     res.status(400).send('Invalid token')
