@@ -1,8 +1,6 @@
 <script lang="ts">
   import type { Auth, User } from 'firebase/auth'
   import { connectTwitch, getTwitchLogin } from './service/twitch'
-  import { sendKeepAliveToTextToSpeech } from './service/audio'
-  import { getTwitchToken } from './service/oauth'
 
   import type { Analytics } from 'firebase/analytics'
   import Connect from './lib/Connect.svelte'
@@ -12,6 +10,8 @@
   import Logout from './lib/Logout.svelte'
   import Toastify from 'toastify-js'
   import type { UserData } from './service/users'
+  import { getTwitchToken } from './service/oauth'
+  import { sendKeepAliveToTextToSpeech } from './service/audio'
 
   import 'three-dots/dist/three-dots.min.css'
   import 'toastify-js/src/toastify.css'
@@ -33,7 +33,7 @@
         Toastify({ text: e.toString() }).showToast()
       })
     if (typeof login === 'undefined') return
-    connectTwitch({ login, token }, playAudio)
+    connectTwitch({ login, token }, (text: string) => {})
   }
 
   initializeTwitch()
