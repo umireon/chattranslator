@@ -52,12 +52,39 @@ paths:
         '204':
           description: 'A successful response'
 
+  /set-twitch-login-to-user:
+    get:
+      summary: 'Set Twitch login to user'
+      operationId: 'set-twitch-login-to-user'
+      x-google-backend:
+        address: 'https://translate-text-h7nyl2mmoq-uc.a.run.app'
+      security:
+        - firebase: []
+      parameters:
+        - in: 'query'
+          name: 'token'
+          type: 'string'
+        - in: 'query'
+          name: 'uid'
+          type: 'string'
+      responses:
+        '204':
+          description: 'A successful response'
+    options:
+      summary: 'Set Twitch login to user Preflight'
+      operationId: 'set-twitch-login-to-user-preflight'
+      x-google-backend:
+        address: 'https://translate-text-h7nyl2mmoq-uc.a.run.app'
+      responses:
+        '204':
+          description: 'A successful response'
+
   /authenticate-with-token:
     get:
       summary: 'Authenticate with token'
       operationId: 'authenticate-with-token'
       x-google-backend:
-        address: 'https://authenticate-with-token-bf7bhumxka-uc.a.run.app'
+        address: 'https://authenticate-with-token-h7nyl2mmoq-uc.a.run.app/'
       parameters:
         - in: 'query'
           name: 'token'
