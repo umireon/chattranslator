@@ -91,6 +91,22 @@ http('translate-text', async (req, res) => {
   res.send({ translatedText })
 })
 
+http('', async (req, res) => {
+  if (!handleCors(req, res)) return
+
+
+  // Validate query
+  if (typeof req.query.token !== 'string') {
+    res.status(400).send('Invalid token')
+    return
+  }
+  if (typeof req.query.uid !== 'string') {
+    res.status(400).send('Invalid uid')
+    return
+  }
+  const { uid, token } = req.query
+})
+
 http('authenticate-with-token', async (req, res) => {
   if (!handleCors(req, res)) return
 
