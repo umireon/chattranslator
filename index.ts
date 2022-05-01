@@ -1,6 +1,9 @@
 import type { HttpFunction } from '@google-cloud/functions-framework'
 import { TranslationServiceClient } from '@google-cloud/translate'
+import { getAuth } from 'firebase-admin/auth'
 import { http } from '@google-cloud/functions-framework'
+import { initializeApp } from 'firebase-admin/app'
+import { getFirestore } from 'firebase-admin/firestore'
 
 const handleCors: HttpFunction = (req, res) => {
   const { origin } = req.headers
@@ -55,6 +58,8 @@ const translateLanguage = async (
   return translatedText
 }
 
+const app = initializeApp()
+
 http('translate-text', async (req, res) => {
   if (!handleCors(req, res)) return
 
@@ -84,4 +89,37 @@ http('translate-text', async (req, res) => {
 
   // Compose response
   res.send({ translatedText })
+})
+
+http('authenticate-with-token', async (req, res) => {
+  if (!handleCors(req, res)) return
+
+  const auth = getAuth(app)
+  const db = getFirestore(app)
+
+  // Validate query
+  if (typeof req.query.token !== 'string') {
+    res.status(400).send('Invalid token')
+    return
+  }
+  if (typeof req.query.uid !== 'string') {
+    res.status(400).send('Invalid uid')
+    return
+  }
+  const { token, uid } = req.query
+
+  // Verify token
+  const docRef = await db.collection('users').doc(uid).get()
+  const data = docRef.data()
+  if (!data) throw new Error('Record could not be fetched')
+  const expectedToken = data.token
+  if (!expectedToken) throw new Error('token not found')
+  if (token !== expectedToken) {
+    res.status(401).send({})
+    return
+  }
+
+  // Generate custom token
+  const customToken = await auth.createCustomToken(uid)
+  res.send(customToken)
 })
