@@ -1,3 +1,5 @@
+import * as irc from 'irc'
+
 import type { TranslateTextOption, TranslateTextResult } from './types.js'
 
 import type { AppContext } from './constants.js'
@@ -9,7 +11,6 @@ import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
 import { http } from '@google-cloud/functions-framework'
 import { initializeApp } from 'firebase-admin/app'
-import * as irc from 'irc'
 
 const handleCors: HttpFunction = (req, res) => {
   const { origin } = req.headers

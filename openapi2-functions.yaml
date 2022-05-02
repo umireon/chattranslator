@@ -52,6 +52,30 @@ paths:
         '204':
           description: 'A successful response'
 
+  /send-text-from-bot-to-chat:
+    get:
+      summary: 'Send text from bot to chat'
+      operationId: 'send-text-from-bot-to-chat'
+      x-google-backend:
+        address: 'https://send-text-from-bot-to-chat-h7nyl2mmoq-uc.a.run.app'
+      security:
+        - firebase: []
+      parameters:
+        - in: 'query'
+          name: 'text'
+          type: 'string'
+      responses:
+        '204':
+          description: 'A successful response'
+    options:
+      summary: 'Send text from bot to chat preflight'
+      operationId: 'send-text-from-bot-to-chat-preflight'
+      x-google-backend:
+        address: 'https://set-twitch-login-to-user-h7nyl2mmoq-uc.a.run.app'
+      responses:
+        '204':
+          description: 'A successful response'
+
   /set-twitch-login-to-user:
     get:
       summary: 'Set Twitch login to user'
