@@ -10,7 +10,7 @@
   import Logout from './lib/Logout.svelte'
   import type { TranslateTextResult } from '../types'
   import Toastify from 'toastify-js'
-  import type { UserData } from './service/users';
+  import type { UserData } from './service/users'
   import { getUserData, setUserData } from './service/users'
   import { getTwitchToken } from './service/oauth'
   import { sendKeepAliveToTextToSpeech } from './service/audio'
@@ -61,10 +61,14 @@
     readonly text: string
   }
 
-  const sendTextFromBotToChat = async (context: AppContext, ser: User, { text }: SendTextFromBotToChatParams) => {
+  const sendTextFromBotToChat = async (
+    { sendTextFromBotToChatEndpoint }: AppContext,
+    user: User,
+    { text }: SendTextFromBotToChatParams
+  ) => {
     const idToken = user.getIdToken()
     const query = new URLSearchParams({ text })
-    const response = await fetch(`${'a'}?${query}`, {
+    const response = await fetch(`${sendTextFromBotToChatEndpoint}?${query}`, {
       headers: {
         authorization: `Bearer ${idToken}`,
       },
@@ -76,9 +80,14 @@
     }
   }
 
-  const a = async (text: string) => {
-    const { translatedText } = await translateText(context, user, { targetLanguageCode, text })
-    await sendTextFromBotToChat(context, user, { text: translatedText })
+  const translateChat = async (text: string) => {
+    const { detectedLanguageCode, translatedText } = await translateText(context, user, {
+      targetLanguageCode,
+      text,
+    })
+    if (detectedLanguageCode !== targetLanguageCode) {
+      await sendTextFromBotToChat(context, user, { text: translatedText })
+    }
   }
 
   const initializeTwitch = async (context: AppContext) => {
@@ -88,7 +97,7 @@
       Toastify({ text: e.toString() }).showToast()
     })
     if (typeof login === 'undefined') return
-    connectTwitch({ login, token }, translateText)
+    connectTwitch({ login, token }, translateChat)
   }
 
   initializeTwitch(DEFAULT_CONTEXT)

@@ -153,6 +153,11 @@ http('send-text-from-bot-to-chat', async (req, res) => {
 
   const db = getFirestore(app)
 
+  // Validate environment
+  const { TWITCH_OAUTH_TOKEN } = process.env
+  if (typeof TWITCH_OAUTH_TOKEN === 'undefined')
+    throw new Error('TWITCH_OAUTH_TOKEN not provided')
+
   // Validate query
   const idTokenBase64 = req.get('X-Apigateway-Api-Userinfo')
   if (typeof idTokenBase64 === 'undefined') {
@@ -170,11 +175,15 @@ http('send-text-from-bot-to-chat', async (req, res) => {
 
   const docRef = await db.collection('userTwitchLogin').doc(uid).get()
   const data = docRef.data()
-  if (typeof data?.login !== 'string') throw new Error('Invalid userTwitchLogin')
+  if (typeof data?.login !== 'string') {
+    console.error(data)
+    throw new Error('Invalid userTwitchLogin')
+  }
   const { login } = data
 
   const client = new irc.Client('irc.chat.twitch.tv:6697', login, {
-    channels: [`#${login}`]
+    channels: [`#${login}`],
+    password: TWITCH_OAUTH_TOKEN,
   })
   client.say(login, text)
 
