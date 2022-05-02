@@ -142,11 +142,12 @@ http('set-twitch-login-to-user', async (req, res) => {
   }
   const { token } = req.query
 
-  const idToken = req.get('X-Apigateway-Api-Userinfo')
-  if (typeof idToken === 'undefined') {
+  const idTokenBase64 = req.get('X-Apigateway-Api-Userinfo')
+  if (typeof idTokenBase64 === 'undefined') {
     res.status(401).send('Unauthorized')
     return
   }
+  const idToken = Buffer.from(idTokenBase64, 'base64').toString()
   const decodedToken = await auth.verifyIdToken(idToken)
   const uid = decodedToken.uid
 
