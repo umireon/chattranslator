@@ -132,7 +132,6 @@ export const getTwitchLogin = async (
 http('set-twitch-login-to-user', async (req, res) => {
   if (!handleCors(req, res)) return
 
-  const auth = getAuth(app)
   const db = getFirestore(app)
 
   // Validate query
