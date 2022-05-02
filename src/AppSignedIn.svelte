@@ -1,19 +1,19 @@
 <script lang="ts">
   import type { Auth, User } from 'firebase/auth'
   import { connectTwitch, getTwitchLogin } from './service/twitch'
+  import { getUserData, setUserData } from './service/users'
 
   import type { Analytics } from 'firebase/analytics'
+  import type { AppContext } from '../constants'
   import Connect from './lib/Connect.svelte'
-  import { AppContext, DEFAULT_CONTEXT } from '../constants'
+  import { DEFAULT_CONTEXT } from '../constants'
   import type { Firestore } from 'firebase/firestore'
   import GenerateUrl from './lib/GenerateUrl.svelte'
   import Logout from './lib/Logout.svelte'
-  import type { TranslateTextResult } from '../types'
   import Toastify from 'toastify-js'
+  import type { TranslateTextResult } from '../types'
   import type { UserData } from './service/users'
-  import { getUserData, setUserData } from './service/users'
   import { getTwitchToken } from './service/oauth'
-  import { sendKeepAliveToTextToSpeech } from './service/audio'
 
   import 'three-dots/dist/three-dots.min.css'
   import 'toastify-js/src/toastify.css'
@@ -63,9 +63,17 @@
 
   const sendTextFromBotToChat = async (
     { sendTextFromBotToChatEndpoint }: AppContext,
+    db: Firestore,
     user: User,
     { text }: SendTextFromBotToChatParams
   ) => {
+    const userData = await getUserData(db, user)
+    if (typeof userData.targetLanguageCode === 'undefined') {
+      console.error(userData)
+      throw new Error('targetLanguageCode missing')
+    }
+    targetLanguageCode = userData.targetLanguageCode
+
     const idToken = user.getIdToken()
     const query = new URLSearchParams({ text })
     const response = await fetch(`${sendTextFromBotToChatEndpoint}?${query}`, {
