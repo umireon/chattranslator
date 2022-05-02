@@ -148,6 +148,7 @@ http('set-twitch-login-to-user', async (req, res) => {
     return
   }
   const idToken = Buffer.from(idTokenBase64, 'base64').toString()
+  console.log(idTokenBase64, idToken)
   const decodedToken = await auth.verifyIdToken(idToken)
   const uid = decodedToken.uid
 
