@@ -10,11 +10,14 @@ export interface AppContext {
 }
 
 export const DEFAULT_CONTEXT: AppContext = {
-  authenticateWithTokenEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev/authenticate-with-token',
-  setTwitchLoginToUserEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev/set-twitch-login-to-user',
+  authenticateWithTokenEndpoint:
+    'https://chattranslatorbot-d74nt8ye.an.gateway.dev/authenticate-with-token',
+  setTwitchLoginToUserEndpoint:
+    'https://chattranslatorbot-d74nt8ye.an.gateway.dev/set-twitch-login-to-user',
   textToSpeechEndpoint: '',
-  translateTextEndpoint: 'https://chattranslatorbot-d74nt8ye.an.gateway.dev/translate-text',
-  twitchClientId: '',
+  translateTextEndpoint:
+    'https://chattranslatorbot-d74nt8ye.an.gateway.dev/translate-text',
+  twitchClientId: '39jqiicnwfja9cefwut98bi59727fm',
   youtubeCallbackEndpoint: '',
   youtubeClientId: '',
   youtubeRefreshEndpoint: '',

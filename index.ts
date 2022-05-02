@@ -132,6 +132,7 @@ export const getTwitchLogin = async (
 http('set-twitch-login-to-user', async (req, res) => {
   if (!handleCors(req, res)) return
 
+  const auth = getAuth(app)
   const db = getFirestore(app)
 
   // Validate query
@@ -139,11 +140,15 @@ http('set-twitch-login-to-user', async (req, res) => {
     res.status(400).send('Invalid token')
     return
   }
-  if (typeof req.query.uid !== 'string') {
-    res.status(400).send('Invalid uid')
+  const { token } = req.query
+
+  const idToken = req.get('X-Apigateway-Api-Userinfo')
+  if (typeof idToken === 'undefined') {
+    res.status(401).send('Unauthorized')
     return
   }
-  const { uid, token } = req.query
+  const decodedToken = await auth.verifyIdToken(idToken)
+  const uid = decodedToken.uid
 
   const login = await getTwitchLogin(DEFAULT_CONTEXT, token)
 

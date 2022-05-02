@@ -21,25 +21,10 @@
     })
     location.href = `https://id.twitch.tv/oauth2/authorize?${query}`
   }
-
-  async function handleYoutubeConnect () {
-    const nonce = generateNonce()
-    await setUserData(db, user, { nonce })
-    const query = new URLSearchParams({
-      access_type: 'offline',
-      client_id: context.youtubeClientId,
-      redirect_uri: `${location.origin}${location.pathname}`.replace(/app.html$/, 'youtube.html'),
-      response_type: 'code',
-      scope: 'https://www.googleapis.com/auth/youtube.readonly',
-      state: nonce
-    })
-    location.href = `https://accounts.google.com/o/oauth2/auth?${query}`
-  }
 </script>
 
 <main>
   <p>
     <button type="button" on:click={handleTwitchConnect}>Connect to Twitch</button>
-    <button type="button" on:click={handleYoutubeConnect}>Connect to YouTube</button>
   </p>
 </main>
