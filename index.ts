@@ -149,10 +149,10 @@ http('set-twitch-login-to-user', async (req, res) => {
   }
   const idToken = Buffer.from(idTokenBase64, 'base64').toString()
   const decodedToken = JSON.parse(idToken)
-  if (typeof decodedToken.user_id !== 'string') {
+  if (typeof decodedToken.sub !== 'string') {
     res.status(401).send('Unauthorized')
   }
-  const uid = decodedToken.user_id
+  const uid = decodedToken.sub
 
   const login = await getTwitchLogin(DEFAULT_CONTEXT, token)
 
