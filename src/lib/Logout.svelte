@@ -3,7 +3,7 @@
 
   export let auth: Auth
 
-  async function handleLogout () {
+  async function handleLogout() {
     await auth.signOut()
     location.href = '/'
   }

@@ -9,15 +9,18 @@
   export let db: Firestore
   export let user: User
 
-  async function handleTwitchConnect () {
+  async function handleTwitchConnect() {
     const nonce = generateNonce()
     await setUserData(db, user, { nonce })
     const query = new URLSearchParams({
       client_id: context.twitchClientId,
-      redirect_uri: `${location.origin}${location.pathname}`.replace(/app.html$/, 'twitch.html'),
+      redirect_uri: `${location.origin}${location.pathname}`.replace(
+        /app.html$/,
+        'twitch.html'
+      ),
       response_type: 'token',
       scope: 'chat:read',
-      state: nonce
+      state: nonce,
     })
     location.href = `https://id.twitch.tv/oauth2/authorize?${query}`
   }
@@ -25,6 +28,8 @@
 
 <main>
   <p>
-    <button type="button" on:click={handleTwitchConnect}>Connect to Twitch</button>
+    <button type="button" on:click={handleTwitchConnect}
+      >Connect to Twitch</button
+    >
   </p>
 </main>

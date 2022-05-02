@@ -20,6 +20,8 @@ export interface UserData {
   readonly 'voice-en'?: string
   readonly 'voice-ja'?: string
   readonly 'voice-und'?: string
+
+  readonly targetLanguageCode: string
 }
 
 export const extractUserData = (data: any): UserData => {

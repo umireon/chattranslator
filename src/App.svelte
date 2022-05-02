@@ -18,16 +18,21 @@
     const token = params.get('token')
     const uid = params.get('uid')
     if (token && uid) {
-      const credential = await authenticateWithToken(auth, DEFAULT_CONTEXT, { token, uid })
+      const credential = await authenticateWithToken(auth, DEFAULT_CONTEXT, {
+        token,
+        uid,
+      })
       return credential.user
     } else {
-      const user = await new Promise<User>((resolve, reject) => auth.onAuthStateChanged(async currentUser => {
-        if (currentUser !== null) {
-          resolve(currentUser)
-        } else {
-          reject(new Error('Not signed in'))
-        }
-      }))
+      const user = await new Promise<User>((resolve, reject) =>
+        auth.onAuthStateChanged(async (currentUser) => {
+          if (currentUser !== null) {
+            resolve(currentUser)
+          } else {
+            reject(new Error('Not signed in'))
+          }
+        })
+      )
       return user
     }
   }
@@ -36,7 +41,7 @@
   const analytics = getAnalytics(app)
   const auth = getAuth(app)
   const db = getFirestore(app)
-  const promise = initializeUser(auth).then(async user => {
+  const promise = initializeUser(auth).then(async (user) => {
     const initialUserData = await getUserData(db, user)
     return { initialUserData, user }
   })
@@ -44,8 +49,8 @@
 
 <main>
   {#await promise}
-    <div id="app-loading" class="dot-bricks" style="margin: 10px;"></div>
-  {:then { initialUserData, user } }
+    <div id="app-loading" class="dot-bricks" style="margin: 10px;" />
+  {:then { initialUserData, user }}
     <AppSignedIn {analytics} {auth} {db} {initialUserData} {user} />
   {:catch}
     <Logout {auth} />

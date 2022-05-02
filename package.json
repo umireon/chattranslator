@@ -7,7 +7,7 @@
     "build": "vite build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "preview": "vite preview",
-    "build-functions": "esbuild --outdir=. constants.ts index.ts",
+    "build-functions": "esbuild --outdir=. constants.ts index.ts types.ts",
     "lint": "eslint --ext .ts,.svelte src *.ts",
     "prettier": "prettier .",
     "functions-framework": "functions-framework",
@@ -28,6 +28,7 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.40",
     "@tsconfig/svelte": "^3.0.0",
     "@types/express": "^4.17.13",
+    "@types/irc": "^0.5.1",
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.30",
     "@types/toastify-js": "^1.11.0",
@@ -46,6 +47,7 @@
     "firebaseui": "^6.0.1",
     "jest": "^27.5.1",
     "prettier": "2.6.2",
+    "prettier-plugin-svelte": "^2.7.0",
     "svelte": "^3.46.4",
     "svelte-check": "^2.4.6",
     "svelte-preprocess": "^4.10.4",
@@ -61,6 +63,7 @@
     "@google-cloud/functions-framework": "^3.0.0",
     "@google-cloud/translate": "^6.3.1",
     "firebase-admin": "^10.1.0",
+    "irc": "^0.5.2",
     "node-fetch": "^3.2.4"
   },
   "type": "module"

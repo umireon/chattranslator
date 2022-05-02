@@ -8,13 +8,16 @@
 </script>
 
 <main>
-  <p><audio type="audio/mpeg" src={playerSrc} autoplay></audio></p>
+  <p><audio type="audio/mpeg" src={playerSrc} autoplay /></p>
   <div style="display: flex; align-items: flex-start;">
     <p style="margin: 0px;">
       <span id="language">{playerLanguage}</span>
       <span id="text">{playerText}</span>
     </p>
-    <div class="dot-bricks" style="visibility: {playerIsLoading ? 'visible' : 'hidden'};"></div>
+    <div
+      class="dot-bricks"
+      style="visibility: {playerIsLoading ? 'visible' : 'hidden'};"
+    />
   </div>
 </main>
 

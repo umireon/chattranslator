@@ -1,3 +1,5 @@
+import type { TranslateTextOption, TranslateTextResult } from './types.js'
+
 import type { AppContext } from './constants.js'
 import { DEFAULT_CONTEXT } from './constants.js'
 import type { HttpFunction } from '@google-cloud/functions-framework'
@@ -7,6 +9,7 @@ import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
 import { http } from '@google-cloud/functions-framework'
 import { initializeApp } from 'firebase-admin/app'
+import * as irc from 'irc'
 
 const handleCors: HttpFunction = (req, res) => {
   const { origin } = req.headers
@@ -30,36 +33,41 @@ const handleCors: HttpFunction = (req, res) => {
   return true
 }
 
-interface TranslateLanguageGlossaryConfig {
-  glossary: string
-  ignoreCase?: boolean
-}
-
-interface TranslateLanguageOption {
-  text: string
-  glossaryConfig?: TranslateLanguageGlossaryConfig
-  projectId: string
-  targetLanguageCode: string
-}
-
-const translateLanguage = async (
+const translateText = async (
   client: TranslationServiceClient,
-  {
-    glossaryConfig,
-    projectId,
-    targetLanguageCode,
-    text,
-  }: TranslateLanguageOption
-) => {
+  { glossaryConfig, projectId, targetLanguageCode, text }: TranslateTextOption
+): Promise<TranslateTextResult> => {
   const [response] = await client.translateText({
     contents: [text],
     glossaryConfig,
     parent: `projects/${projectId}/locations/global`,
     targetLanguageCode,
   })
-  if (!Array.isArray(response.translations)) throw new Error('Invalid response')
-  const [{ translatedText }] = response.translations
-  return translatedText
+  if (typeof response === 'undefined') {
+    console.error(JSON.stringify(response))
+    throw new Error('Invalid response')
+  }
+
+  const translations =
+    typeof glossaryConfig === 'undefined'
+      ? response.translations
+      : response.glossaryTranslations
+  if (!Array.isArray(translations) || typeof translations[0] === 'undefined') {
+    console.error(JSON.stringify(response))
+    throw new Error('Invalid response')
+  }
+
+  const { detectedLanguageCode, translatedText } = translations[0]
+  if (!detectedLanguageCode || !translatedText) {
+    console.error(JSON.stringify(response))
+    throw new Error('Invalid response')
+  }
+
+  return {
+    ...translations[0],
+    detectedLanguageCode,
+    translatedText,
+  }
 }
 
 const app = initializeApp()
@@ -85,14 +93,14 @@ http('translate-text', async (req, res) => {
 
   // Translate text
   const translationClient = new TranslationServiceClient()
-  const translatedText = await translateLanguage(translationClient, {
+  const response = await translateText(translationClient, {
     projectId: PROJECT_ID,
     targetLanguageCode: 'en',
     text,
   })
 
   // Compose response
-  res.send({ translatedText })
+  res.send(response)
 })
 
 export interface TwitchUsersData {
@@ -129,29 +137,66 @@ export const getTwitchLogin = async (
   return login
 }
 
+const getUidFromBase64 = (idTokenBase64: string): string => {
+  const idToken = Buffer.from(idTokenBase64, 'base64').toString()
+  const decodedToken = JSON.parse(idToken)
+  if (typeof decodedToken.sub !== 'string') {
+    console.error(idToken)
+    throw new Error('Invalid idToken')
+  }
+  return decodedToken.sub
+}
+
+http('send-text-from-bot-to-chat', async (req, res) => {
+  if (!handleCors(req, res)) return
+
+  const db = getFirestore(app)
+
+  // Validate query
+  const idTokenBase64 = req.get('X-Apigateway-Api-Userinfo')
+  if (typeof idTokenBase64 === 'undefined') {
+    console.error('X-Apigateway-Api-Userinfo missing')
+    res.status(401).send('Unauthorized')
+    return
+  }
+  const uid = getUidFromBase64(idTokenBase64)
+  if (typeof req.query.text !== 'string') {
+    console.error(req.query)
+    res.status(400).send('Invalid text')
+    return
+  }
+  const { text } = req.query
+
+  const docRef = await db.collection('userTwitchLogin').doc(uid).get()
+  const data = docRef.data()
+  if (typeof data?.login !== 'string') throw new Error('Invalid userTwitchLogin')
+  const { login } = data
+
+  const client = new irc.Client('irc.chat.twitch.tv:6697', login, {
+    channels: [`#${login}`]
+  })
+  client.say(login, text)
+
+  res.status(204).send('')
+})
+
 http('set-twitch-login-to-user', async (req, res) => {
   if (!handleCors(req, res)) return
 
   const db = getFirestore(app)
 
   // Validate query
-  if (typeof req.query.token !== 'string') {
-    res.status(400).send('Invalid token')
-    return
-  }
-  const { token } = req.query
-
   const idTokenBase64 = req.get('X-Apigateway-Api-Userinfo')
   if (typeof idTokenBase64 === 'undefined') {
     res.status(401).send('Unauthorized')
     return
   }
-  const idToken = Buffer.from(idTokenBase64, 'base64').toString()
-  const decodedToken = JSON.parse(idToken)
-  if (typeof decodedToken.sub !== 'string') {
-    res.status(401).send('Unauthorized')
+  const uid = getUidFromBase64(idTokenBase64)
+  if (typeof req.query.token !== 'string') {
+    res.status(400).send('Invalid token')
+    return
   }
-  const uid = decodedToken.sub
+  const { token } = req.query
 
   const login = await getTwitchLogin(DEFAULT_CONTEXT, token)
 

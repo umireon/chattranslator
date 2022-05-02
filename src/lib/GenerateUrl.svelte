@@ -9,11 +9,11 @@
 
   let value: string = ''
 
-  function uint8ArrayToHexString (array: Uint8Array) {
-    return Array.from(array, b => b.toString(16).padStart(2, '0')).join('')
+  function uint8ArrayToHexString(array: Uint8Array) {
+    return Array.from(array, (b) => b.toString(16).padStart(2, '0')).join('')
   }
 
-  async function handleClickGenerateUrl () {
+  async function handleClickGenerateUrl() {
     const { token } = await getUserData(db, user)
     if (typeof token !== 'undefined' && token !== null) {
       const query = new URLSearchParams({ token: token, uid: user.uid })
@@ -28,12 +28,11 @@
     }
   }
 
-  async function handleClickCopyUrl () {
+  async function handleClickCopyUrl() {
     await navigator.clipboard.writeText(value)
   }
 
-
-  async function handleClickResetUrl () {
+  async function handleClickResetUrl() {
     await setUserData(db, user, { token: null })
     value = ''
   }
@@ -41,8 +40,10 @@
 
 <main>
   <p>
-    <button type="button" on:click={handleClickGenerateUrl}>Generate URL for OBS browser</button>
-    <input placeholder="OBS URL" {value}>
+    <button type="button" on:click={handleClickGenerateUrl}
+      >Generate URL for OBS browser</button
+    >
+    <input placeholder="OBS URL" {value} />
     <button type="button" on:click={handleClickCopyUrl}>Copy URL</button>
     <button type="button" on:click={handleClickResetUrl}>Reset URL</button>
   </p>
