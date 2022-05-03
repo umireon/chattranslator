@@ -2,8 +2,11 @@ import * as irc from 'irc'
 
 import type { TranslateTextOption, TranslateTextResult } from './types.js'
 
+import type { AccessToken } from 'simple-oauth2'
 import type { AppContext } from './constants.js'
+import { ClientCredentials } from 'simple-oauth2'
 import { DEFAULT_CONTEXT } from './constants.js'
+import type { Firestore } from 'firebase-admin/firestore'
 import type { HttpFunction } from '@google-cloud/functions-framework'
 import { TranslationServiceClient } from '@google-cloud/translate'
 import fetch from 'node-fetch'
@@ -148,15 +151,69 @@ const getUidFromBase64 = (idTokenBase64: string): string => {
   return decodedToken.sub
 }
 
+const getOrRefreshTwitchAccessToken = async (
+  client: ClientCredentials,
+  accessTokenJson?: string
+): Promise<AccessToken> => {
+  const params = { scope: 'chat:write' }
+  if (typeof accessTokenJson === 'string') {
+    const accessToken = client.createToken(JSON.parse(accessTokenJson))
+    if (accessToken.expired()) {
+      const refreshedAccessToken = await accessToken.refresh(params)
+      return refreshedAccessToken
+    } else {
+      return accessToken
+    }
+  } else {
+    const accessToken = await client.getToken(params)
+    return accessToken
+  }
+}
+
+const obtainTwitchAccessToken = async (
+  { twitchClientId }: AppContext,
+  db: Firestore,
+  secret: string
+): Promise<AccessToken> => {
+  const client = new ClientCredentials({
+    auth: {
+      tokenHost: 'https://id.twitch.tv',
+      tokenPath: '/oauth2/token',
+    },
+    client: {
+      id: DEFAULT_CONTEXT.twitchClientId,
+      secret,
+    },
+  })
+
+  const docRef = await db.collection('twitchAccessToken').doc('server').get()
+  const data = docRef.data()
+  const accessToken = await getOrRefreshTwitchAccessToken(
+    client,
+    data?.accessTokenJson
+  )
+  const accessTokenJson = JSON.stringify(accessToken)
+  db.collection('twitchAccessToekn').doc('server').set({ accessTokenJson })
+  return accessToken
+}
+
 http('send-text-from-bot-to-chat', async (req, res) => {
   if (!handleCors(req, res)) return
 
   const db = getFirestore(app)
 
   // Validate environment
-  const { TWITCH_OAUTH_TOKEN } = process.env
-  if (typeof TWITCH_OAUTH_TOKEN === 'undefined')
-    throw new Error('TWITCH_OAUTH_TOKEN not provided')
+  const { TWITCH_CLIENT_SECRET } = process.env
+  if (typeof TWITCH_CLIENT_SECRET === 'undefined') {
+    throw new Error('TWITCH_CLIENT_SECRET not provided')
+  }
+
+  const password = await obtainTwitchAccessToken(
+    DEFAULT_CONTEXT,
+    db,
+    TWITCH_CLIENT_SECRET
+  )
+  console.log(password)
 
   // Validate query
   const idTokenBase64 = req.get('X-Apigateway-Api-Userinfo')
@@ -183,7 +240,6 @@ http('send-text-from-bot-to-chat', async (req, res) => {
 
   const client = new irc.Client('irc.chat.twitch.tv:6697', login, {
     channels: [`#${login}`],
-    password: TWITCH_OAUTH_TOKEN,
   })
   client.say(login, text)
 

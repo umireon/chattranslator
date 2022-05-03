@@ -27,7 +27,7 @@
 
   const context = DEFAULT_CONTEXT
 
-  let { targetLanguageCode } = initialUserData
+  let targetLanguageCode = initialUserData.targetLanguageCode || 'en'
 
   $: setUserData(db, user, { targetLanguageCode })
 
@@ -41,7 +41,7 @@
     user: User,
     { targetLanguageCode, text }: TranslateTextParams
   ): Promise<TranslateTextResult> => {
-    const idToken = user.getIdToken()
+    const idToken = await user.getIdToken()
     const query = new URLSearchParams({ targetLanguageCode, text })
     const response = await fetch(`${translateTextEndpoint}?${query}`, {
       headers: {
@@ -74,7 +74,7 @@
     }
     targetLanguageCode = userData.targetLanguageCode
 
-    const idToken = user.getIdToken()
+    const idToken = await user.getIdToken()
     const query = new URLSearchParams({ text })
     const response = await fetch(`${sendTextFromBotToChatEndpoint}?${query}`, {
       headers: {
@@ -89,12 +89,16 @@
   }
 
   const translateChat = async (text: string) => {
-    const { detectedLanguageCode, translatedText } = await translateText(context, user, {
-      targetLanguageCode,
-      text,
-    })
+    const { detectedLanguageCode, translatedText } = await translateText(
+      context,
+      user,
+      {
+        targetLanguageCode,
+        text,
+      }
+    )
     if (detectedLanguageCode !== targetLanguageCode) {
-      await sendTextFromBotToChat(context, user, { text: translatedText })
+      await sendTextFromBotToChat(context, db, user, { text: translatedText })
     }
   }
 
