@@ -96,7 +96,7 @@ http('send-text-from-bot-to-chat', async (req, res) => {
     channels: [`#${login}`],
     password,
   })
-  client.say(login, text)
+  client.say(`#${login}`, text)
 
   res.status(204).send('')
 })
