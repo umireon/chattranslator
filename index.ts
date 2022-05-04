@@ -92,9 +92,10 @@ http('send-text-from-bot-to-chat', async (req, res) => {
   }
   const { login } = data
 
-  const client = new irc.Client('irc.chat.twitch.tv:6697', login, {
+  const client = new irc.Client('irc.chat.twitch.tv', login, {
     channels: [`#${login}`],
     password,
+    port: 6697,
   })
   client.say(`#${login}`, text)
 
