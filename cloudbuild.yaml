@@ -22,6 +22,7 @@ steps:
       - '--gen2'
       - '--region=us-central1'
       - '--runtime=nodejs16'
+      - '--service-account=cloudfunctions@chattranslatorbot.iam.gserviceaccount.com'
       - '--set-env-vars=PROJECT_ID=$PROJECT_ID'
       - '--trigger-http'
     waitFor: ['npm run build-functions']
@@ -35,6 +36,7 @@ steps:
       - '--gen2'
       - '--region=us-central1'
       - '--runtime=nodejs16'
+      - '--service-account=cloudfunctions@chattranslatorbot.iam.gserviceaccount.com'
       - '--set-env-vars=PROJECT_ID=$PROJECT_ID'
       - '--trigger-http'
     waitFor: ['npm run build-functions']
@@ -48,6 +50,7 @@ steps:
       - '--gen2'
       - '--region=us-central1'
       - '--runtime=nodejs16'
+      - '--service-account=cloudfunctions@chattranslatorbot.iam.gserviceaccount.com'
       - '--set-env-vars=PROJECT_ID=$PROJECT_ID'
       - '--trigger-http'
     waitFor: ['npm run build-functions']
@@ -61,6 +64,7 @@ steps:
       - '--gen2'
       - '--region=us-central1'
       - '--runtime=nodejs16'
+      - '--service-account=cloudfunctions@chattranslatorbot.iam.gserviceaccount.com'
       - '--set-env-vars=PROJECT_ID=$PROJECT_ID'
       - '--trigger-http'
     waitFor: ['npm run build-functions']
