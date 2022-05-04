@@ -178,7 +178,10 @@ export const getOrRefreshTwitchAccessToken = async (
       client_secret: clientSecret,
       grant_type: 'client_credentials',
     })
-    const response = await fetch('https://id.twitch.tv/oauth2/token', { body })
+    const response = await fetch('https://id.twitch.tv/oauth2/token', {
+      body,
+      method: 'POST',
+    })
     if (!response.ok) {
       const text = await response.text()
       console.error(text)
