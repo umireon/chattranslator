@@ -116,7 +116,7 @@ export const getOrRefreshTwitchAccessToken = async (
   client: ClientCredentials,
   accessTokenJson?: string
 ): Promise<AccessToken> => {
-  const params = { scope: 'chat:edit' }
+  const params = { scope: ['chat:read', 'chat:edit'] }
   if (typeof accessTokenJson === 'string') {
     const accessToken = client.createToken(JSON.parse(accessTokenJson))
     if (accessToken.expired()) {
