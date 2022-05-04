@@ -97,6 +97,9 @@ http('send-text-from-bot-to-chat', async (req, res) => {
     password,
     port: 6697,
   })
+  client.addListener('message', function (from, to, message) {
+    console.log(from + ' => ' + to + ': ' + message);
+  })
   client.say(`#${login}`, text)
 
   res.status(204).send('')
