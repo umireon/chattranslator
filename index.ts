@@ -8,6 +8,7 @@ import { ClientCredentials } from 'simple-oauth2'
 import { DEFAULT_CONTEXT } from './constants.js'
 import type { Firestore } from 'firebase-admin/firestore'
 import type { HttpFunction } from '@google-cloud/functions-framework'
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 import { TranslationServiceClient } from '@google-cloud/translate'
 import fetch from 'node-fetch'
 import { getAuth } from 'firebase-admin/auth'
@@ -197,21 +198,59 @@ const obtainTwitchAccessToken = async (
   return accessToken
 }
 
+interface GetTwitchClientSecretOption {
+  readonly name?: string
+  readonly projectId: string
+  readonly version?: string
+}
+
+const DEFAULT_TWITCH_CLIENT_SECRET_VERSION = '1'
+
+const coarseIntoString = (data: Uint8Array | string): string => {
+  if (typeof data === 'string') {
+    return data
+  } else {
+    const decoder = new TextDecoder()
+    return decoder.decode(data)
+  }
+}
+
+const getTwitchClientSecret = async (
+  client: SecretManagerServiceClient,
+  {
+    name = 'twitch-client-secret',
+    projectId,
+    version = DEFAULT_TWITCH_CLIENT_SECRET_VERSION,
+  }: GetTwitchClientSecretOption
+) => {
+  const [response] = await client.accessSecretVersion({
+    name: `projects/${projectId}/secrets/${name}/versions/${version}`,
+  })
+  if (!response.payload || !response.payload.data)
+    throw new Error('Invalid response')
+  return coarseIntoString(response.payload.data)
+}
+
 http('send-text-from-bot-to-chat', async (req, res) => {
   if (!handleCors(req, res)) return
 
   const db = getFirestore(app)
 
   // Validate environment
-  const { TWITCH_CLIENT_SECRET } = process.env
-  if (typeof TWITCH_CLIENT_SECRET === 'undefined') {
-    throw new Error('TWITCH_CLIENT_SECRET not provided')
+  const { PROJECT_ID } = process.env
+  if (typeof PROJECT_ID === 'undefined') {
+    throw new Error('PROJECT_ID not provided')
   }
+
+  const secretManagerClient = new SecretManagerServiceClient()
+  const clientSecret = await getTwitchClientSecret(secretManagerClient, {
+    projectId: PROJECT_ID,
+  })
 
   const password = await obtainTwitchAccessToken(
     DEFAULT_CONTEXT,
     db,
-    TWITCH_CLIENT_SECRET
+    clientSecret
   )
   console.log(password)
 
