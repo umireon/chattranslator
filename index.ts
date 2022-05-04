@@ -100,6 +100,9 @@ http('send-text-from-bot-to-chat', async (req, res) => {
   client.addListener('message', function (from, to, message) {
     console.log(from + ' => ' + to + ': ' + message);
   })
+  client.addListener('error', function(message) {
+    console.log('error: ', message);
+  })
   client.say(`#${login}`, text)
 
   res.status(204).send('')
