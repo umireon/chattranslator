@@ -1,9 +1,11 @@
+import {
+  Firestore,
+  FirestoreDataConverter,
+  Timestamp,
+} from 'firebase-admin/firestore'
 import type { TranslateTextOption, TranslateTextResult } from './types.js'
 
-import type { AccessToken } from 'simple-oauth2'
 import type { AppContext } from './constants.js'
-import { ClientCredentials } from 'simple-oauth2'
-import type { Firestore } from 'firebase-admin/firestore'
 import { HttpFunction } from '@google-cloud/functions-framework'
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 import { TranslationServiceClient } from '@google-cloud/translate'
@@ -112,55 +114,115 @@ export const getUidFromBase64 = (idTokenBase64: string): string => {
   return decodedToken.sub
 }
 
+export interface TwitchAccessTokenData {
+  readonly token?: string
+  readonly expiresAt?: Timestamp
+}
+
+export const extractTwitchAccessTokenData = (
+  data: any
+): TwitchAccessTokenData => {
+  let result: TwitchAccessTokenData = {}
+  if (typeof data.expiresAt !== 'undefined') {
+    result = { ...result, expiresAt: data.expiresAt }
+  }
+  if (typeof data.token !== 'undefined') {
+    result = { ...result, token: data.token }
+  }
+  return result
+}
+
+export const twitchAccessTokenConverter: FirestoreDataConverter<TwitchAccessTokenData> =
+  {
+    fromFirestore: (snapshot) => {
+      const data = snapshot.data()
+      return extractTwitchAccessTokenData(data)
+    },
+    toFirestore: extractTwitchAccessTokenData,
+  }
+
+export interface OauthAccessToken {
+  /* eslint-disable camelcase */
+  readonly access_token: string
+  readonly expires_in: number
+  /* eslint-enable camelcase */
+}
+
+export const isOauthAccessToken = (arg: any): arg is OauthAccessToken => {
+  return (
+    typeof arg.access_token === 'string' && typeof arg.expires_in === 'number'
+  )
+}
+
+export interface GetOrRefreshTwitchAccessTokenParams {
+  readonly clientId: string
+  readonly clientSecret: string
+}
+
+export const OAUTH_EXPIRE_WINDOW_SECONDS = 60
+
 export const getOrRefreshTwitchAccessToken = async (
-  client: ClientCredentials,
-  accessTokenJson?: string
-): Promise<AccessToken> => {
-  const params = { scope: ['chat:edit', 'chat:read'] }
-  if (typeof accessTokenJson === 'string') {
-    const accessToken = client.createToken(JSON.parse(accessTokenJson))
-    if (accessToken.expired()) {
-      const refreshedAccessToken = await accessToken.refresh(params)
-      return refreshedAccessToken
-    } else {
-      return accessToken
+  { clientId, clientSecret }: GetOrRefreshTwitchAccessTokenParams,
+  twitchAccessTokenData: TwitchAccessTokenData | undefined
+): Promise<Required<TwitchAccessTokenData>> => {
+  const expiresAt = twitchAccessTokenData?.expiresAt
+  const token = twitchAccessTokenData?.token
+  const now = Timestamp.now().toDate()
+  if (
+    typeof expiresAt === 'undefined' ||
+    typeof token === 'undefined' ||
+    now > expiresAt.toDate()
+  ) {
+    const body = new URLSearchParams({
+      client_id: clientId,
+      client_secret: clientSecret,
+      grant_type: 'client_credentials',
+    })
+    const response = await fetch('https://id.twitch.tv/oauth2/token', { body })
+    if (!response.ok) {
+      const text = await response.text()
+      console.error(text)
+      throw new Error('Invalid response')
     }
+
+    const json = await response.json()
+    if (!isOauthAccessToken(json)) {
+      const text = await response.text()
+      console.error(text)
+      throw new Error('Invalid response')
+    }
+
+    const newTwitchAccessTokenData = {
+      expiresAt: Timestamp.fromDate(
+        new Date(
+          now.getTime() + (json.expires_in - OAUTH_EXPIRE_WINDOW_SECONDS) * 1000
+        )
+      ),
+      token: json.access_token,
+    }
+    return newTwitchAccessTokenData
   } else {
-    try {
-      const accessToken = await client.getToken(params)
-      return accessToken
-    } catch (e) {
-      console.error(e)
-      throw e
-    }
+    return { expiresAt, token }
   }
 }
 
 export const obtainTwitchAccessToken = async (
   { twitchClientId }: AppContext,
   db: Firestore,
-  secret: string
-): Promise<AccessToken> => {
-  const client = new ClientCredentials({
-    auth: {
-      tokenHost: 'https://id.twitch.tv',
-      tokenPath: '/oauth2/token',
-    },
-    client: {
-      id: twitchClientId,
-      secret,
-    },
-  })
-
-  const docRef = await db.collection('twitchAccessToken').doc('server').get()
-  const data = docRef.data()
-  const accessToken = await getOrRefreshTwitchAccessToken(
-    client,
-    data?.accessTokenJson
+  clientSecret: string
+): Promise<string> => {
+  const docRef = db
+    .collection('twitchAccessToken')
+    .withConverter(twitchAccessTokenConverter)
+    .doc('server')
+  const docSnapshot = await docRef.get()
+  const data = docSnapshot.data()
+  const newData = await getOrRefreshTwitchAccessToken(
+    { clientId: twitchClientId, clientSecret },
+    data
   )
-  const accessTokenJson = JSON.stringify(accessToken)
-  db.collection('twitchAccessToekn').doc('server').set({ accessTokenJson })
-  return accessToken
+  await docRef.set(newData)
+  return newData.token
 }
 
 export interface GetTwitchClientSecretOption {

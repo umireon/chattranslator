@@ -18,6 +18,7 @@ import { http } from '@google-cloud/functions-framework'
 import { initializeApp } from 'firebase-admin/app'
 
 const app = initializeApp()
+const context = DEFAULT_CONTEXT
 
 http('translate-text', async (req, res) => {
   if (!handleCors(req, res)) return
@@ -66,12 +67,7 @@ http('send-text-from-bot-to-chat', async (req, res) => {
     projectId: PROJECT_ID,
   })
 
-  const password = await obtainTwitchAccessToken(
-    DEFAULT_CONTEXT,
-    db,
-    clientSecret
-  )
-  console.log(password)
+  const password = await obtainTwitchAccessToken(context, db, clientSecret)
 
   // Validate query
   const idTokenBase64 = req.get('X-Apigateway-Api-Userinfo')
@@ -98,6 +94,7 @@ http('send-text-from-bot-to-chat', async (req, res) => {
 
   const client = new irc.Client('irc.chat.twitch.tv:6697', login, {
     channels: [`#${login}`],
+    password,
   })
   client.say(login, text)
 
@@ -122,7 +119,7 @@ http('set-twitch-login-to-user', async (req, res) => {
   }
   const { token } = req.query
 
-  const login = await getTwitchLogin(DEFAULT_CONTEXT, token)
+  const login = await getTwitchLogin(context, token)
 
   await db.collection('userTwitchLogin').doc(uid).set({ login })
 

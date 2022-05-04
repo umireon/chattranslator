@@ -66,8 +66,7 @@
     "@google-cloud/translate": "^6.3.1",
     "firebase-admin": "^10.1.0",
     "irc": "^0.5.2",
-    "node-fetch": "^3.2.4",
-    "simple-oauth2": "^4.3.0"
+    "node-fetch": "^3.2.4"
   },
   "type": "module"
 }
