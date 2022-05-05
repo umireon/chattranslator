@@ -49,47 +49,21 @@ export const connectTwitch = async (
   const { login, token } = params
   const client = new TmiClient({
     channels: [login],
+    connection: {
+      reconnect: true,
+      secure: true,
+    },
     identity: {
       password: `oauth:${token}`,
       username: login,
     },
+    options: {
+      debug: true,
+      messagesLogLevel: 'info',
+    },
   })
   await client.connect()
-
-  const socket = new WebSocket('wss://irc-ws.chat.twitch.tv')
-  socket.addEventListener('open', () => {
-    socket.send(`PASS oauth:${token}`)
-    socket.send(`NICK ${login}`)
-    socket.send(`JOIN #${login}`)
-  })
-  socket.addEventListener('message', async (event) => {
-    console.log(event.data)
-  })
-  const privmsgRegexp = new RegExp(`PRIVMSG #${login} :(.*)`)
-  socket.addEventListener('message', async (event) => {
-    if (typeof event.data === 'string') {
-      const m = event.data.match(privmsgRegexp)
-      if (m !== null && typeof m[1] !== 'undefined') {
-        callback(m[1])
-      }
-    }
-  })
-  socket.addEventListener('message', async (event) => {
-    if (typeof event.data === 'string') {
-      const m = event.data.match(/PING :tmi.twitch.tv/)
-      if (m !== null) {
-        socket.send('PONG :tmi.twitch.tv')
-      }
-    }
-  })
-  socket.addEventListener('close', (event) => {
-    console.log(event)
-    setTimeout(() => {
-      connectTwitch(params, callback)
-    }, 1000)
-  })
-  socket.addEventListener('error', (event) => {
-    console.error(event)
-    socket.close()
+  client.on('message', (channel, tags, message, self) => {
+    callback(message)
   })
 }

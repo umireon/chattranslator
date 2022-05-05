@@ -114,22 +114,27 @@
 
   initializeTwitch(DEFAULT_CONTEXT)
 
-  const setKeepAliveInterval = ({
-    sendTextFromBotToChatEndpoint,
-    translateTextEndpoint,
-  }: AppContext) => {
+  const setKeepAliveInterval = (
+    { sendTextFromBotToChatEndpoint, translateTextEndpoint }: AppContext,
+    user: User
+  ) => {
     const endpoints = [sendTextFromBotToChatEndpoint, translateTextEndpoint]
     const query = new URLSearchParams({ keepAlive: 'true' })
-    const sendKeepAlive = () => {
+    const sendKeepAlive = async () => {
+      const idToken = await user.getIdToken()
       for (const endpoint of endpoints) {
-        fetch(`${endpoint}?${query}`)
+        fetch(`${endpoint}?${query}`, {
+          headers: {
+            authorization: `Bearer ${idToken}`,
+          },
+        })
       }
     }
     setInterval(sendKeepAlive, 60000)
     sendKeepAlive()
   }
 
-  setKeepAliveInterval(context)
+  setKeepAliveInterval(context, user)
 </script>
 
 <main>
