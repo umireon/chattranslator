@@ -21,11 +21,15 @@
     const uid = params.get('uid')
     if (token && uid) {
       for (let i = 0; i < AUTHENTICATE_MAX_RETRY; i++) {
-        const credential = await authenticateWithToken(auth, DEFAULT_CONTEXT, {
-          token,
-          uid,
-        })
-        return credential.user
+        try {
+          const credential = await authenticateWithToken(auth, DEFAULT_CONTEXT, {
+            token,
+            uid,
+          })
+          return credential.user
+        } catch (e) {
+          console.error(e)
+        }
       }
       throw new Error('Could not be authenticated')
     } else {
