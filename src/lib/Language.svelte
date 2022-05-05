@@ -8,7 +8,7 @@
 
 <main>
   <p>
-    <label for="targetLanguage">Target</label>
+    <label for="targetLanguage">Target Language</label>
     <input id="targetLanguage" type="text" bind:value={targetLanguageCode} />
   </p>
 </main>
