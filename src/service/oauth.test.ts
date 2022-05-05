@@ -1,6 +1,6 @@
 import { generateNonce } from './oauth'
 
-test('setKeepAliveInterval sends requests immediately adn sets interval', async () => {
+test('generateNonce returns crypto-based string', async () => {
   const _crypto = {
     getRandomValues(array: Uint32Array): Uint32Array {
       array[0] = 42
