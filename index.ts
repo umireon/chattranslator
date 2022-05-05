@@ -1,5 +1,6 @@
 import {
   getTwitchLogin,
+  getTwitchOauthToken,
   getUidFromBase64,
   handleCors,
   translateText,
@@ -60,7 +61,7 @@ http('send-text-from-bot-to-chat', async (req, res) => {
   }
 
   const secretManagerClient = new SecretManagerServiceClient()
-  const token = await getTwitchClientSecret(secretManagerClient, {
+  const token = await getTwitchOauthToken(secretManagerClient, {
     projectId: PROJECT_ID,
   })
 
@@ -158,7 +159,3 @@ http('authenticate-with-token', async (req, res) => {
   const customToken = await auth.createCustomToken(uid)
   res.send(customToken)
 })
-function getTwitchClientSecret(secretManagerClient: SecretManagerServiceClient, arg1: { projectId: string }) {
-  throw new Error('Function not implemented.')
-}
-
