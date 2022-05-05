@@ -10,11 +10,12 @@ export interface TranslateTextParams {
 export const translateText = async (
   { translateTextEndpoint }: AppContext,
   user: User,
-  { targetLanguageCode, text }: TranslateTextParams
+  { targetLanguageCode, text }: TranslateTextParams,
+  _fetch = fetch
 ): Promise<TranslateTextResult> => {
   const idToken = await user.getIdToken()
   const query = new URLSearchParams({ targetLanguageCode, text })
-  const response = await fetch(`${translateTextEndpoint}?${query}`, {
+  const response = await _fetch(`${translateTextEndpoint}?${query}`, {
     headers: {
       authorization: `Bearer ${idToken}`,
     },
