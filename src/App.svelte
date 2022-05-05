@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Auth, User, UserCredential } from 'firebase/auth'
+  import type { Auth, User } from 'firebase/auth'
   import { DEFAULT_CONTEXT, firebaseConfig } from '../constants'
 
   import AppSignedIn from './AppSignedIn.svelte'

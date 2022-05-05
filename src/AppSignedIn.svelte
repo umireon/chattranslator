@@ -2,7 +2,6 @@
   import type { Auth, User } from 'firebase/auth'
   import Language, { defaultTargetLanguageCode } from './lib/Language.svelte'
   import { connectTwitch, getTwitchLogin } from './service/twitch'
-  import { getUserData, setUserData } from './service/users'
 
   import type { Analytics } from 'firebase/analytics'
   import type { AppContext } from '../constants'
@@ -18,6 +17,7 @@
   import { logEvent } from 'firebase/analytics'
   import { sendTextFromBotToChat } from './service/bot'
   import { setKeepAliveInterval } from './service/keepalive'
+  import { setUserData } from './service/users'
   import { translateText } from './service/translate'
 
   import 'three-dots/dist/three-dots.min.css'
