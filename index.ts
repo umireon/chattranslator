@@ -114,7 +114,6 @@ http('send-text-from-bot-to-chat', async (req, res) => {
 
   await client.connect()
   await client.say(login, text)
-  client.disconnect()
 
   res.status(204).send('')
 })
