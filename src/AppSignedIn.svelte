@@ -12,7 +12,7 @@
   import Logout from './lib/Logout.svelte'
   import Toastify from 'toastify-js'
   import type { UserData } from './service/users'
-  import { getTwitchLogin } from '../service'
+  import { getTwitchLogin } from './service/twitch'
   import { getTwitchToken } from './service/oauth'
   import { sendTextFromBotToChat } from './service/bot'
   import { setKeepAliveInterval } from './service/keepalive'
