@@ -10,10 +10,11 @@ interface AuthenticateWithTokenOptions {
 export const authenticateWithToken = async (
   auth: Auth,
   { authenticateWithTokenEndpoint }: AppContext,
-  { token, uid }: AuthenticateWithTokenOptions
+  { token, uid }: AuthenticateWithTokenOptions,
+  _fetch = fetch
 ) => {
   const query = new URLSearchParams({ token, uid })
-  const response = await fetch(`${authenticateWithTokenEndpoint}?${query}`)
+  const response = await _fetch(`${authenticateWithTokenEndpoint}?${query}`)
   if (!response.ok) throw new Error('Authentication failed')
   const customToken = await response.text()
   const credential = await signInWithCustomToken(auth, customToken)
