@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Auth, User } from 'firebase/auth'
+  import Language, { defaultTargetLanguageCode } from './lib/Language.svelte'
   import { connectTwitch } from './service/twitch'
   import { getUserData, setUserData } from './service/users'
 
@@ -30,7 +31,8 @@
 
   const context = DEFAULT_CONTEXT
 
-  let targetLanguageCode = initialUserData.targetLanguageCode || 'en'
+  let targetLanguageCode =
+    initialUserData.targetLanguageCode || defaultTargetLanguageCode
 
   $: setUserData(db, user, { targetLanguageCode })
 
@@ -40,7 +42,9 @@
       console.error(userData)
       throw new Error('targetLanguageCode missing')
     }
-    targetLanguageCode = userData.targetLanguageCode
+    if (targetLanguageCode !== userData.targetLanguageCode) {
+      targetLanguageCode = userData.targetLanguageCode
+    }
 
     const { detectedLanguageCode, translatedText } = await translateText(
       context,
@@ -74,6 +78,7 @@
 </script>
 
 <main>
+  <Language bind:targetLanguageCode />
   <Connect {context} {db} {user} />
   <GenerateUrl {db} {user} />
   <Logout {auth} />
