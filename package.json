@@ -3,27 +3,27 @@
   "version": "0.1.0",
   "description": "Chat message translator on Twitch for OBS and so on.",
   "scripts": {
-    "dev": "vite",
+    "build-functions": "esbuild --outdir=. common/*.ts index.ts service/*.ts",
     "build": "vite build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
-    "preview": "vite preview",
-    "build-functions": "esbuild --outdir=. common/*.ts index.ts service/*.ts",
+    "dev": "vite",
+    "functions-framework": "functions-framework",
     "lint": "eslint --ext .ts,.svelte src *.ts",
     "prettier": "prettier .",
-    "functions-framework": "functions-framework",
+    "preview": "vite preview",
     "test": "jest",
     "tsc": "tsc"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/umireon/chattalker.git"
+    "url": "git+https://github.com/umireon/chattranslatorbot.git"
   },
   "author": "Kaito Udagawa",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/umireon/chattalker/issues"
+    "url": "https://github.com/umireon/chattranslatorbot/issues"
   },
-  "homepage": "https://github.com/umireon/chattalker#readme",
+  "homepage": "https://github.com/umireon/chattranslatorbot#readme",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.40",
     "@tsconfig/svelte": "^3.0.0",
