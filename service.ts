@@ -13,7 +13,7 @@ export const handleCors: HttpFunction = (req, res) => {
     if (hostname === 'localhost') {
       res.set('Access-Control-Allow-Origin', '*')
     } else {
-      res.set('Access-Control-Allow-Origin', 'https://chattalker.web.app')
+      res.set('Access-Control-Allow-Origin', 'https://chattranslatorbot.web.app')
     }
   }
 
