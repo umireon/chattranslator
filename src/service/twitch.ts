@@ -1,4 +1,4 @@
-import { AppContext } from '../../constants'
+import { AppContext } from '../../common/constants'
 import type { ChatUserstate } from 'tmi.js'
 import { Client as TmiClient } from 'tmi.js'
 

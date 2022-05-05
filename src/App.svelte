@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Auth, User } from 'firebase/auth'
-  import { DEFAULT_CONTEXT, firebaseConfig } from '../constants'
+  import { DEFAULT_CONTEXT, firebaseConfig } from '../common/constants'
 
   import AppSignedIn from './AppSignedIn.svelte'
   import Logout from './lib/Logout.svelte'

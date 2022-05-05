@@ -1,4 +1,4 @@
-import { AppContext } from '../../constants'
+import { AppContext } from '../../common/constants'
 import { User } from 'firebase/auth'
 
 interface SendTextFromBotToChatParams {

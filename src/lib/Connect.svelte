@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { AppContext } from '../../constants'
+  import type { AppContext } from '../../common/constants'
   import type { Firestore } from 'firebase/firestore'
   import type { User } from 'firebase/auth'
   import { generateNonce } from '../service/oauth'

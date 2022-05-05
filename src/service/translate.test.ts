@@ -1,4 +1,4 @@
-import type { AppContext } from '../../constants'
+import type { AppContext } from '../../common/constants'
 import type { User } from 'firebase/auth'
 import { translateText } from './translate'
 

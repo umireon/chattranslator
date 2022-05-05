@@ -1,6 +1,6 @@
 import type { TranslateTextOption, TranslateTextResult } from './types.js'
 
-import type { AppContext } from './constants.js'
+import type { AppContext } from './common/constants.js'
 import { HttpFunction } from '@google-cloud/functions-framework'
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 import { TranslationServiceClient } from '@google-cloud/translate'

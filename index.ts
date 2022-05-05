@@ -6,7 +6,7 @@ import {
   translateText,
 } from './service.js'
 
-import { DEFAULT_CONTEXT } from './constants.js'
+import { DEFAULT_CONTEXT } from './common/constants.js'
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 import { Client as TmiClient } from 'tmi.js'
 import { TranslationServiceClient } from '@google-cloud/translate'

@@ -4,10 +4,10 @@
   import { connectTwitch, getTwitchLogin } from './service/twitch'
 
   import type { Analytics } from 'firebase/analytics'
-  import type { AppContext } from '../constants'
+  import type { AppContext } from '../common/constants'
   import type { ChatUserstate } from 'tmi.js'
   import Connect from './lib/Connect.svelte'
-  import { DEFAULT_CONTEXT } from '../constants'
+  import { DEFAULT_CONTEXT } from '../common/constants'
   import type { Firestore } from 'firebase/firestore'
   import GenerateUrl from './lib/GenerateUrl.svelte'
   import Logout from './lib/Logout.svelte'

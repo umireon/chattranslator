@@ -1,4 +1,4 @@
-import type { AppContext } from '../../constants'
+import type { AppContext } from '../../common/constants'
 import type { Auth } from 'firebase/auth'
 import { signInWithCustomToken } from 'firebase/auth'
 
