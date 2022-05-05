@@ -92,7 +92,7 @@ http('send-text-from-bot-to-chat', async (req, res) => {
     identity: {
       password: `oauth:${token}`,
       username: 'chattranslatorbot',
-    }
+    },
   })
 
   await client.connect()

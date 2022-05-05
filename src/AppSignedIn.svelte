@@ -113,6 +113,22 @@
   }
 
   initializeTwitch(DEFAULT_CONTEXT)
+
+  const setKeepAliveInterval = ({
+    sendTextFromBotToChatEndpoint,
+    translateTextEndpoint,
+  }: AppContext) => {
+    const endpoints = [sendTextFromBotToChatEndpoint, translateTextEndpoint]
+    const sendKeepAlive = () => {
+      for (const endpoint of endpoints) {
+        fetch(endpoint, { method: 'OPTION' })
+      }
+    }
+    setInterval(sendKeepAlive, 60000)
+    sendKeepAlive()
+  }
+
+  setKeepAliveInterval(context)
 </script>
 
 <main>
