@@ -4,13 +4,9 @@ import { extractUserData } from './users'
 test('extractUserData extracts everything from a valid UserData', () => {
   const userData: UserData = {
     nonce: '',
+    targetLanguageCode: '',
     token: '',
     'twitch-access-token': '',
-    'voice-en': '',
-    'voice-ja': '',
-    'voice-und': '',
-    'youtube-access-token': '',
-    'youtube-refresh-token': '',
   }
   expect(extractUserData(userData)).toEqual(userData)
 })
