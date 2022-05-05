@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Auth, User } from 'firebase/auth'
+  import type { Auth, User, UserCredential } from 'firebase/auth'
   import { DEFAULT_CONTEXT, firebaseConfig } from '../constants'
 
   import AppSignedIn from './AppSignedIn.svelte'
@@ -13,16 +13,21 @@
 
   import 'three-dots/dist/three-dots.min.css'
 
-  const initializeUser = async (auth: Auth) => {
+  const AUTHENTICATE_MAX_RETRY = 5
+
+  const initializeUser = async (auth: Auth): Promise<User> => {
     const params = new URLSearchParams(location.hash.slice(1))
     const token = params.get('token')
     const uid = params.get('uid')
     if (token && uid) {
-      const credential = await authenticateWithToken(auth, DEFAULT_CONTEXT, {
-        token,
-        uid,
-      })
-      return credential.user
+      for (let i = 0; i < AUTHENTICATE_MAX_RETRY; i++) {
+        const credential = await authenticateWithToken(auth, DEFAULT_CONTEXT, {
+          token,
+          uid,
+        })
+        return credential.user
+      }
+      throw new Error('Could not be authenticated')
     } else {
       const user = await new Promise<User>((resolve, reject) =>
         auth.onAuthStateChanged(async (currentUser) => {
