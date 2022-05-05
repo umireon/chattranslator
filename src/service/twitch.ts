@@ -1,4 +1,5 @@
 import type { AppContext } from '../../constants'
+import { Client as TmiClient } from 'tmi.js'
 
 export interface TwitchUsersData {
   readonly login: string
@@ -41,11 +42,20 @@ export interface ConnectTwitchParams {
 
 type ConnectTwitchCallback = (text: string) => void
 
-export const connectTwitch = (
+export const connectTwitch = async (
   params: ConnectTwitchParams,
   callback: ConnectTwitchCallback
 ) => {
   const { login, token } = params
+  const client = new TmiClient({
+    channels: [login],
+    identity: {
+      password: `oauth:${token}`,
+      username: login,
+    },
+  })
+  await client.connect()
+
   const socket = new WebSocket('wss://irc-ws.chat.twitch.tv')
   socket.addEventListener('open', () => {
     socket.send(`PASS oauth:${token}`)
