@@ -104,7 +104,7 @@ http('send-text-from-bot-to-chat', async (req, res) => {
     },
     identity: {
       password: `oauth:${token}`,
-      username: login,
+      username: 'chattranslatorbot',
     },
     options: {
       debug: true,
