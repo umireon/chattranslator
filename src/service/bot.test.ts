@@ -12,12 +12,12 @@ test('sendTextFromBotToChat resolves if request succeeds', async () => {
     },
   } as User
   const text = 'text'
-  const fetch = jest.fn().mockImplementation((input, init) => {
+  const _fetch = jest.fn().mockImplementation((input, init) => {
     expect(input).toBe('endpoint?text=text')
     expect(init).toEqual({ headers: { authorization: `Bearer idToken` } })
     return { ok: true }
   })
-  await sendTextFromBotToChat(context, user, { text }, fetch)
+  await sendTextFromBotToChat(context, user, { text }, _fetch)
 })
 
 // test('sendTextFromBotToChat rejects if request fails', async () => {
