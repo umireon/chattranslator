@@ -6,6 +6,7 @@
 
   import type { Analytics } from 'firebase/analytics'
   import type { AppContext } from '../constants'
+  import type { ChatUserstate } from 'tmi.js'
   import Connect from './lib/Connect.svelte'
   import { DEFAULT_CONTEXT } from '../constants'
   import type { Firestore } from 'firebase/firestore'
@@ -36,14 +37,17 @@
 
   $: setUserData(db, user, { targetLanguageCode })
 
-  export const translateChat = async (text: string) => {
+  export const translateChat = async (text: string, tags: ChatUserstate) => {
     const userData = await getUserData(db, user)
-    if (typeof userData.targetLanguageCode === 'undefined') {
-      console.error(userData)
-      throw new Error('targetLanguageCode missing')
-    }
-    if (targetLanguageCode !== userData.targetLanguageCode) {
+    if (
+      typeof userData.targetLanguageCode !== 'undefined' &&
+      targetLanguageCode !== userData.targetLanguageCode
+    ) {
       targetLanguageCode = userData.targetLanguageCode
+    }
+
+    if (tags.username === context.botUsername) {
+      return
     }
 
     const { detectedLanguageCode, translatedText } = await translateText(

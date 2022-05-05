@@ -1,4 +1,5 @@
 import { AppContext } from '../../constants'
+import type { ChatUserstate } from 'tmi.js'
 import { Client as TmiClient } from 'tmi.js'
 
 export interface TwitchUsersData {
@@ -40,7 +41,7 @@ export interface ConnectTwitchParams {
   token: string
 }
 
-export type ConnectTwitchCallback = (text: string) => void
+export type ConnectTwitchCallback = (text: string, tags: ChatUserstate) => void
 
 export const connectTwitch = async (
   params: ConnectTwitchParams,
@@ -64,6 +65,6 @@ export const connectTwitch = async (
   })
   await client.connect()
   client.on('message', (channel, tags, message, self) => {
-    callback(message)
+    callback(message, tags)
   })
 }
