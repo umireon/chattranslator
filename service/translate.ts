@@ -1,4 +1,7 @@
-import type { TranslateTextOption, TranslateTextResult } from '../common/translate'
+import type {
+  TranslateTextOption,
+  TranslateTextResult,
+} from '../common/translate'
 import { TranslationServiceClient } from '@google-cloud/translate'
 
 export const translateText = async (

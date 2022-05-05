@@ -37,12 +37,12 @@
       }
       throw new Error('Could not be authenticated')
     } else {
-      const user = await new Promise<User>((resolve, reject) =>
+      const user = await new Promise<User>((resolve) =>
         auth.onAuthStateChanged(async (currentUser) => {
           if (currentUser !== null) {
             resolve(currentUser)
           } else {
-            reject(new Error('Not signed in'))
+            throw new Error('Not signed in')
           }
         })
       )
