@@ -8,11 +8,12 @@ interface SendTextFromBotToChatParams {
 export const sendTextFromBotToChat = async (
   { sendTextFromBotToChatEndpoint }: AppContext,
   user: User,
-  { text }: SendTextFromBotToChatParams
+  { text }: SendTextFromBotToChatParams,
+  _fetch = fetch
 ): Promise<void> => {
   const idToken = await user.getIdToken()
   const query = new URLSearchParams({ text })
-  const response = await fetch(`${sendTextFromBotToChatEndpoint}?${query}`, {
+  const response = await _fetch(`${sendTextFromBotToChatEndpoint}?${query}`, {
     headers: {
       authorization: `Bearer ${idToken}`,
     },
