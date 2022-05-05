@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Auth, User } from 'firebase/auth'
   import Language, { defaultTargetLanguageCode } from './lib/Language.svelte'
-  import { connectTwitch } from './service/twitch'
+  import { connectTwitch, getTwitchLogin } from './service/twitch'
   import { getUserData, setUserData } from './service/users'
 
   import type { Analytics } from 'firebase/analytics'
@@ -14,8 +14,8 @@
   import Logout from './lib/Logout.svelte'
   import Toastify from 'toastify-js'
   import type { UserData } from './service/users'
-  import { getTwitchLogin } from './service/twitch'
   import { getTwitchToken } from './service/oauth'
+  import { logEvent } from 'firebase/analytics'
   import { sendTextFromBotToChat } from './service/bot'
   import { setKeepAliveInterval } from './service/keepalive'
   import { translateText } from './service/translate'
@@ -59,6 +59,7 @@
       }
     )
     if (detectedLanguageCode !== targetLanguageCode) {
+      logEvent(analytics, 'chat_translated')
       await sendTextFromBotToChat(context, user, { text: translatedText })
     }
   }
