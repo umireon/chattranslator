@@ -19,13 +19,17 @@
     const params = new URLSearchParams(location.hash.slice(1))
     const token = params.get('token')
     const uid = params.get('uid')
-    if (token && uid) {
+    if (token !== null && uid !== null) {
       for (let i = 0; i < AUTHENTICATE_MAX_RETRY; i++) {
         try {
-          const credential = await authenticateWithToken(auth, DEFAULT_CONTEXT, {
-            token,
-            uid,
-          })
+          const credential = await authenticateWithToken(
+            auth,
+            DEFAULT_CONTEXT,
+            {
+              token,
+              uid,
+            }
+          )
           return credential.user
         } catch (e) {
           console.error(e)
@@ -62,6 +66,7 @@
   {:then { initialUserData, user }}
     <AppSignedIn {analytics} {auth} {db} {initialUserData} {user} />
   {:catch}
+    <h2 style="color: red;">An authentication error was occurred!</h2>
     <Logout {auth} />
   {/await}
 </main>
