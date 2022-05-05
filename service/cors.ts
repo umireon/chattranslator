@@ -1,4 +1,4 @@
-import { HttpFunction } from '@google-cloud/functions-framework'
+import type { HttpFunction } from '@google-cloud/functions-framework'
 
 export const handleCors: HttpFunction = (req, res) => {
   const { origin } = req.headers

@@ -1,13 +1,13 @@
 export interface TranslateTextGlossaryConfig {
-  glossary?: string | null
-  ignoreCase?: boolean | null
+  readonly glossary?: string | null
+  readonly ignoreCase?: boolean | null
 }
 
 export interface TranslateTextOption {
-  text: string
-  glossaryConfig?: TranslateTextGlossaryConfig
-  projectId: string
-  targetLanguageCode: string
+  readonly text: string
+  readonly glossaryConfig?: TranslateTextGlossaryConfig
+  readonly projectId: string
+  readonly targetLanguageCode: string
 }
 
 export interface TranslateTextResult {

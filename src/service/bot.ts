@@ -1,5 +1,5 @@
-import { AppContext } from '../../common/constants'
-import { User } from 'firebase/auth'
+import type { AppContext } from '../../common/constants'
+import type { User } from 'firebase/auth'
 
 interface SendTextFromBotToChatParams {
   readonly text: string
