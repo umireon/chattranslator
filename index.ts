@@ -1,16 +1,13 @@
-import * as irc from 'irc'
-
 import {
-  getTwitchClientSecret,
   getTwitchLogin,
   getUidFromBase64,
   handleCors,
-  obtainTwitchAccessToken,
   translateText,
 } from './service.js'
 
 import { DEFAULT_CONTEXT } from './constants.js'
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
+import { Client as TmiClient } from 'tmi.js'
 import { TranslationServiceClient } from '@google-cloud/translate'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
@@ -63,11 +60,9 @@ http('send-text-from-bot-to-chat', async (req, res) => {
   }
 
   const secretManagerClient = new SecretManagerServiceClient()
-  const clientSecret = await getTwitchClientSecret(secretManagerClient, {
+  const token = await getTwitchClientSecret(secretManagerClient, {
     projectId: PROJECT_ID,
   })
-
-  const password = await obtainTwitchAccessToken(context, db, clientSecret)
 
   // Validate query
   const idTokenBase64 = req.get('X-Apigateway-Api-Userinfo')
@@ -92,18 +87,16 @@ http('send-text-from-bot-to-chat', async (req, res) => {
   }
   const { login } = data
 
-  const client = new irc.Client('irc.chat.twitch.tv', login, {
-    channels: [`#${login}`],
-    password,
-    port: 6697,
+  const client = new TmiClient({
+    identity: {
+      password: `oauth:${token}`,
+      username: 'chattranslatorbot',
+    }
   })
-  client.addListener('message', function (from, to, message) {
-    console.log(from + ' => ' + to + ': ' + message);
-  })
-  client.addListener('error', function(message) {
-    console.log('error: ', message);
-  })
-  client.say(`#${login}`, text)
+
+  await client.connect()
+  await client.say(login, text)
+  client.disconnect()
 
   res.status(204).send('')
 })
@@ -165,3 +158,7 @@ http('authenticate-with-token', async (req, res) => {
   const customToken = await auth.createCustomToken(uid)
   res.send(customToken)
 })
+function getTwitchClientSecret(secretManagerClient: SecretManagerServiceClient, arg1: { projectId: string }) {
+  throw new Error('Function not implemented.')
+}
+
