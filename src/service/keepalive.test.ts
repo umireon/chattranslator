@@ -1,4 +1,4 @@
-import { User } from 'firebase/auth'
+import type { User } from 'firebase/auth'
 import { setKeepAliveInterval } from './keepalive'
 
 test('setKeepAliveInterval sends requests immediately adn sets interval', async () => {
