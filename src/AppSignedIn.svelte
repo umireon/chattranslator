@@ -119,9 +119,10 @@
     translateTextEndpoint,
   }: AppContext) => {
     const endpoints = [sendTextFromBotToChatEndpoint, translateTextEndpoint]
+    const query = new URLSearchParams({ keepAlive: 'true' })
     const sendKeepAlive = () => {
       for (const endpoint of endpoints) {
-        fetch(endpoint, { method: 'OPTION' })
+        fetch(`${endpoint}?${query}`)
       }
     }
     setInterval(sendKeepAlive, 60000)

@@ -21,16 +21,18 @@ const context = DEFAULT_CONTEXT
 http('translate-text', async (req, res) => {
   if (!handleCors(req, res)) return
 
+  // Keep Alive
+  if (req.query.keepAlive === 'true') {
+    res.status(204).send('')
+    return
+  }
+
   // Validate environment
   const { PROJECT_ID } = process.env
   if (typeof PROJECT_ID === 'undefined')
     throw new Error('PROJECT_ID not provided')
 
   // Validate query
-  if (req.query.keepAlive === 'true') {
-    res.status(204).send('')
-    return
-  }
   if (typeof req.query.text !== 'string') {
     res.status(400).send('Invalid text')
     return
@@ -51,6 +53,12 @@ http('translate-text', async (req, res) => {
 
 http('send-text-from-bot-to-chat', async (req, res) => {
   if (!handleCors(req, res)) return
+
+  // Keep Alive
+  if (req.query.keepAlive === 'true') {
+    res.status(204).send('')
+    return
+  }
 
   const db = getFirestore(app)
 
