@@ -10,7 +10,6 @@
   import type { Firestore } from 'firebase/firestore'
   import GenerateUrl from './lib/GenerateUrl.svelte'
   import Logout from './lib/Logout.svelte'
-  import Toastify from 'toastify-js'
   import type { UserData } from './service/users'
   import { connectTwitch } from './service/twitch'
   import { getTwitchLogin } from '../common/twitch'
@@ -22,7 +21,6 @@
   import { translateText } from './service/translate'
 
   import 'three-dots/dist/three-dots.min.css'
-  import 'toastify-js/src/toastify.css'
 
   export let analytics: Analytics
   export let auth: Auth
@@ -63,7 +61,9 @@
     const token = await getTwitchToken(db, user)
     if (typeof token === 'undefined') return
     const login = await getTwitchLogin(context, token).catch(e => {
-      error = e
+      if (e instanceof Error) {
+        error = e
+      }
     })
     if (typeof login === 'undefined') return
     connectTwitch({ login, token }, translateChat)
@@ -79,7 +79,7 @@
 
 <main>
   {#if typeof error !== 'undefined'}
-    <h2>{error.toString()}</h2>
+    <h2>{error.message}</h2>
   {/if}
   <Language bind:targetLanguageCode />
   <Connect {context} {db} {user} />
