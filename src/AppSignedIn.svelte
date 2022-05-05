@@ -38,14 +38,6 @@
   $: setUserData(db, user, { targetLanguageCode })
 
   export const translateChat = async (text: string, tags: ChatUserstate) => {
-    const userData = await getUserData(db, user)
-    if (
-      typeof userData.targetLanguageCode !== 'undefined' &&
-      targetLanguageCode !== userData.targetLanguageCode
-    ) {
-      targetLanguageCode = userData.targetLanguageCode
-    }
-
     if (tags.username === context.botUsername) {
       return
     }
