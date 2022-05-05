@@ -1,22 +1,21 @@
-import {
-  getTwitchLogin,
-  getTwitchOauthToken,
-  getUidFromBase64,
-  handleCors,
-  translateText,
-} from './service.js'
-
 import { DEFAULT_CONTEXT } from './common/constants.js'
 import { SecretManagerServiceClient } from '@google-cloud/secret-manager'
 import { Client as TmiClient } from 'tmi.js'
 import { TranslationServiceClient } from '@google-cloud/translate'
 import { getAuth } from 'firebase-admin/auth'
 import { getFirestore } from 'firebase-admin/firestore'
+import { getTwitchLogin } from './common/twitch.js'
+import { getTwitchOauthToken } from './service/secret.js'
+import { getUidFromBase64 } from './service/apigateway.js'
+import { handleCors } from './service/cors.js'
 import { http } from '@google-cloud/functions-framework'
 import { initializeApp } from 'firebase-admin/app'
+import nodeFetch from 'node-fetch'
+import { translateText } from './service/translate.js'
 
 const app = initializeApp()
 const context = DEFAULT_CONTEXT
+const _fetch = nodeFetch as typeof fetch
 
 http('translate-text', async (req, res) => {
   if (!handleCors(req, res)) return
@@ -139,7 +138,7 @@ http('set-twitch-login-to-user', async (req, res) => {
   }
   const { token } = req.query
 
-  const login = await getTwitchLogin(context, token)
+  const login = await getTwitchLogin(context, token, _fetch)
 
   await db.collection('userTwitchLogin').doc(uid).set({ login })
 

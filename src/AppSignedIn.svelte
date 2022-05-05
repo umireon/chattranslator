@@ -1,7 +1,6 @@
 <script lang="ts">
   import type { Auth, User } from 'firebase/auth'
   import Language, { defaultTargetLanguageCode } from './lib/Language.svelte'
-  import { connectTwitch, getTwitchLogin } from './service/twitch'
 
   import type { Analytics } from 'firebase/analytics'
   import type { AppContext } from '../common/constants'
@@ -13,6 +12,8 @@
   import Logout from './lib/Logout.svelte'
   import Toastify from 'toastify-js'
   import type { UserData } from './service/users'
+  import { connectTwitch } from './service/twitch'
+  import { getTwitchLogin } from '../common/twitch'
   import { getTwitchToken } from './service/oauth'
   import { logEvent } from 'firebase/analytics'
   import { sendTextFromBotToChat } from './service/bot'

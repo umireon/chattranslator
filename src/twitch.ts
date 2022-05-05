@@ -1,4 +1,8 @@
-import { AppContext, DEFAULT_CONTEXT, firebaseConfig } from '../common/constants'
+import {
+  AppContext,
+  DEFAULT_CONTEXT,
+  firebaseConfig,
+} from '../common/constants'
 import { getAnalytics, logEvent } from 'firebase/analytics'
 
 import type { User } from 'firebase/auth'

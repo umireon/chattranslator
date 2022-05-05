@@ -24,6 +24,11 @@ test('translateText returns a translated text', async () => {
       ok: true,
     }
   })
-  const actual = await translateText(context, user, { targetLanguageCode, text }, _fetch)
+  const actual = await translateText(
+    context,
+    user,
+    { targetLanguageCode, text },
+    _fetch
+  )
   expect(actual).toBe(expected)
 })

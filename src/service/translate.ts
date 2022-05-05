@@ -1,5 +1,5 @@
 import { AppContext } from '../../common/constants'
-import { TranslateTextResult } from '../../types'
+import { TranslateTextResult } from '../../common/translate'
 import { User } from 'firebase/auth'
 
 export interface TranslateTextParams {
