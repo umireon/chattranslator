@@ -38,6 +38,8 @@
 
   $: setUserData(db, user, { targetLanguageCode })
 
+  let error: Error | undefined
+
   export const translateChat = async (text: string, tags: ChatUserstate) => {
     if (tags.username === context.botUsername) {
       return
@@ -60,8 +62,8 @@
   const initializeTwitch = async (context: AppContext) => {
     const token = await getTwitchToken(db, user)
     if (typeof token === 'undefined') return
-    const login = await getTwitchLogin(context, token).catch((e) => {
-      Toastify({ text: e.toString() }).showToast()
+    const login = await getTwitchLogin(context, token).catch(e => {
+      error = e
     })
     if (typeof login === 'undefined') return
     connectTwitch({ login, token }, translateChat)
@@ -76,6 +78,9 @@
 </script>
 
 <main>
+  {#if typeof error !== 'undefined'}
+    <h2>{error.toString()}</h2>
+  {/if}
   <Language bind:targetLanguageCode />
   <Connect {context} {db} {user} />
   <GenerateUrl {db} {user} />
