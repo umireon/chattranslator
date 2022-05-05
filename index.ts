@@ -33,17 +33,21 @@ http('translate-text', async (req, res) => {
     throw new Error('PROJECT_ID not provided')
 
   // Validate query
+  if (typeof req.query.targetLanguageCode !== 'string') {
+    res.status(400).send('Invalid text')
+    return
+  }
   if (typeof req.query.text !== 'string') {
     res.status(400).send('Invalid text')
     return
   }
-  const { text } = req.query
+  const { targetLanguageCode, text } = req.query
 
   // Translate text
   const translationClient = new TranslationServiceClient()
   const response = await translateText(translationClient, {
     projectId: PROJECT_ID,
-    targetLanguageCode: 'en',
+    targetLanguageCode: targetLanguageCode,
     text,
   })
 
