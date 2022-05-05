@@ -97,7 +97,6 @@ http('send-text-from-bot-to-chat', async (req, res) => {
   const { login } = data
 
   const client = new TmiClient({
-    channels: [login],
     connection: {
       reconnect: true,
       secure: true,
