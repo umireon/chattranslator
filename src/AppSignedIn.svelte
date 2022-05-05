@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { Auth, User } from 'firebase/auth'
-  import { connectTwitch, getTwitchLogin } from './service/twitch'
+  import { connectTwitch } from './service/twitch'
   import { getUserData, setUserData } from './service/users'
 
   import type { Analytics } from 'firebase/analytics'
@@ -11,9 +11,12 @@
   import GenerateUrl from './lib/GenerateUrl.svelte'
   import Logout from './lib/Logout.svelte'
   import Toastify from 'toastify-js'
-  import type { TranslateTextResult } from '../types'
   import type { UserData } from './service/users'
+  import { getTwitchLogin } from '../service'
   import { getTwitchToken } from './service/oauth'
+  import { sendTextFromBotToChat } from './service/bot'
+  import { setKeepAliveInterval } from './service/keepalive'
+  import { translateText } from './service/translate'
 
   import 'three-dots/dist/three-dots.min.css'
   import 'toastify-js/src/toastify.css'
@@ -31,42 +34,7 @@
 
   $: setUserData(db, user, { targetLanguageCode })
 
-  interface TranslateTextParams {
-    readonly targetLanguageCode: string
-    readonly text: string
-  }
-
-  const translateText = async (
-    { translateTextEndpoint }: AppContext,
-    user: User,
-    { targetLanguageCode, text }: TranslateTextParams
-  ): Promise<TranslateTextResult> => {
-    const idToken = await user.getIdToken()
-    const query = new URLSearchParams({ targetLanguageCode, text })
-    const response = await fetch(`${translateTextEndpoint}?${query}`, {
-      headers: {
-        authorization: `Bearer ${idToken}`,
-      },
-    })
-    if (!response.ok) {
-      const text = await response.text()
-      console.error(text)
-      throw new Error('Invalid response')
-    }
-    const json = await response.json()
-    return json
-  }
-
-  interface SendTextFromBotToChatParams {
-    readonly text: string
-  }
-
-  const sendTextFromBotToChat = async (
-    { sendTextFromBotToChatEndpoint }: AppContext,
-    db: Firestore,
-    user: User,
-    { text }: SendTextFromBotToChatParams
-  ) => {
+  export const translateChat = async (text: string) => {
     const userData = await getUserData(db, user)
     if (typeof userData.targetLanguageCode === 'undefined') {
       console.error(userData)
@@ -74,21 +42,6 @@
     }
     targetLanguageCode = userData.targetLanguageCode
 
-    const idToken = await user.getIdToken()
-    const query = new URLSearchParams({ text })
-    const response = await fetch(`${sendTextFromBotToChatEndpoint}?${query}`, {
-      headers: {
-        authorization: `Bearer ${idToken}`,
-      },
-    })
-    if (!response.ok) {
-      const text = await response.text()
-      console.error(text)
-      throw new Error('Invalid response')
-    }
-  }
-
-  const translateChat = async (text: string) => {
     const { detectedLanguageCode, translatedText } = await translateText(
       context,
       user,
@@ -98,7 +51,7 @@
       }
     )
     if (detectedLanguageCode !== targetLanguageCode) {
-      await sendTextFromBotToChat(context, db, user, { text: translatedText })
+      await sendTextFromBotToChat(context, user, { text: translatedText })
     }
   }
 
@@ -114,27 +67,10 @@
 
   initializeTwitch(DEFAULT_CONTEXT)
 
-  const setKeepAliveInterval = (
-    { sendTextFromBotToChatEndpoint, translateTextEndpoint }: AppContext,
-    user: User
-  ) => {
-    const endpoints = [sendTextFromBotToChatEndpoint, translateTextEndpoint]
-    const query = new URLSearchParams({ keepAlive: 'true' })
-    const sendKeepAlive = async () => {
-      const idToken = await user.getIdToken()
-      for (const endpoint of endpoints) {
-        fetch(`${endpoint}?${query}`, {
-          headers: {
-            authorization: `Bearer ${idToken}`,
-          },
-        })
-      }
-    }
-    setInterval(sendKeepAlive, 60000)
-    sendKeepAlive()
-  }
-
-  setKeepAliveInterval(context, user)
+  setKeepAliveInterval(user, [
+    context.sendTextFromBotToChatEndpoint,
+    context.translateTextEndpoint,
+  ])
 </script>
 
 <main>
