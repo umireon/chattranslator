@@ -6,9 +6,13 @@ export interface GetTwitchOAuthTokenOption {
   readonly version?: string
 }
 
+export const TWITCH_OAUTH_TOKEN_FIELD_NAME = 'twitch-oauth-token'
 export const DEFAULT_TWITCH_OAUTH_TOKEN_VERSION = '1'
 
-export const coarseIntoString = (data: Uint8Array | string, _TextDecoder = TextDecoder): string => {
+export const coarseIntoString = (
+  data: Uint8Array | string,
+  _TextDecoder = TextDecoder
+): string => {
   if (typeof data === 'string') {
     return data
   } else {
@@ -20,7 +24,7 @@ export const coarseIntoString = (data: Uint8Array | string, _TextDecoder = TextD
 export const getTwitchOauthToken = async (
   client: SecretManagerServiceClient,
   {
-    name = 'twitch-oauth-token',
+    name = TWITCH_OAUTH_TOKEN_FIELD_NAME,
     projectId,
     version = DEFAULT_TWITCH_OAUTH_TOKEN_VERSION,
   }: GetTwitchOAuthTokenOption,
