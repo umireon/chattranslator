@@ -1,6 +1,7 @@
-import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import * as util from 'util';
+
 import { coarseIntoString, getTwitchOauthToken } from './secret'
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 
 const _TextDecoder = util.TextDecoder as typeof TextDecoder
 
