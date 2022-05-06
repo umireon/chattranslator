@@ -5,7 +5,7 @@ import { signInWithCustomToken } from 'firebase/auth'
 
 jest.mock('firebase/auth')
 
-test('sendTextFromBotToChat resolves if request succeeds', async () => {
+test('authenticateWithToken returns UserCredential', async () => {
   const context = { authenticateWithTokenEndpoint: 'endpoint' } as AppContext
   const auth = {} as Auth
   const token = 'token'
