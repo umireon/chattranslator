@@ -24,9 +24,9 @@ test('setTwitchToken gets twitch-access-token', async () => {
   const db = {} as Firestore
   const user = {} as User
   await setTwitchToken(db, user, 'token')
-  expect(mockedSetUserData.mock.calls[0][1]).toBe(db)
-  expect(mockedSetUserData.mock.calls[0][2]).toBe(user)
-  expect(mockedSetUserData.mock.calls[0][3]).toEqual({
+  expect(mockedSetUserData.mock.calls[0][0]).toBe(db)
+  expect(mockedSetUserData.mock.calls[0][1]).toBe(user)
+  expect(mockedSetUserData.mock.calls[0][2]).toEqual({
     'twitch-access-token': 'token',
   })
 })
