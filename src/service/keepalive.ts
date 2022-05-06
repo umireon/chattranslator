@@ -8,12 +8,15 @@ export const setKeepAliveInterval = async (
   const query = new URLSearchParams({ keepAlive: 'true' })
   const sendKeepAlive = async () => {
     const idToken = await user.getIdToken()
-    await Promise.all(endpoints.map(endpoint => 
-      _fetch(`${endpoint}?${query}`, {
-        headers: {
-          authorization: `Bearer ${idToken}`,
-        },
-      })))
+    await Promise.all(
+      endpoints.map((endpoint) =>
+        _fetch(`${endpoint}?${query}`, {
+          headers: {
+            authorization: `Bearer ${idToken}`,
+          },
+        })
+      )
+    )
   }
   await sendKeepAlive()
   return setInterval(sendKeepAlive, 60000)

@@ -19,7 +19,7 @@ test('authenticateWithToken returns UserCredential', async () => {
     ok: true,
     async text() {
       return customToken
-    }
+    },
   }
   const _fetch = jest.fn().mockResolvedValue(response)
   const credential = {} as UserCredential

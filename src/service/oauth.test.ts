@@ -27,7 +27,7 @@ test('setTwitchToken gets twitch-access-token', async () => {
   expect(mockedSetUserData.mock.calls[0][1]).toBe(db)
   expect(mockedSetUserData.mock.calls[0][2]).toBe(user)
   expect(mockedSetUserData.mock.calls[0][3]).toEqual({
-    'twitch-access-token': 'token'
+    'twitch-access-token': 'token',
   })
 })
 
