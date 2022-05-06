@@ -1,6 +1,6 @@
 import type { User } from 'firebase/auth'
 
-export const setKeepAliveInterval = (
+export const setKeepAliveInterval = async (
   user: User,
   endpoints: string[],
   _fetch = fetch
@@ -8,14 +8,13 @@ export const setKeepAliveInterval = (
   const query = new URLSearchParams({ keepAlive: 'true' })
   const sendKeepAlive = async () => {
     const idToken = await user.getIdToken()
-    for (const endpoint of endpoints) {
+    await Promise.all(endpoints.map(endpoint => 
       _fetch(`${endpoint}?${query}`, {
         headers: {
           authorization: `Bearer ${idToken}`,
         },
-      })
-    }
+      })))
   }
-  sendKeepAlive()
+  await sendKeepAlive()
   return setInterval(sendKeepAlive, 60000)
 }

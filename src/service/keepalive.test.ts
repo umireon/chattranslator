@@ -8,17 +8,12 @@ test('setKeepAliveInterval sends requests immediately adn sets interval', async 
     },
   } as User
   const endpoints = ['endpoint1', 'endpoint2']
-  const _fetch = jest
-    .fn()
-    .mockImplementationOnce((input, init) => {
-      expect(input).toBe('endpoint1?keepAlive=true')
-      expect(init).toEqual({ headers: { authorization: `Bearer idToken` } })
-    })
-    .mockImplementationOnce((input, init) => {
-      expect(input).toBe('endpoint2?keepAlive=true')
-      expect(init).toEqual({ headers: { authorization: `Bearer idToken` } })
-    })
-  const timer = setKeepAliveInterval(user, endpoints, _fetch)
-  expect(timer).toBeDefined()
+  const _fetch = jest.fn()
+  const timer = await setKeepAliveInterval(user, endpoints, _fetch)
   clearInterval(timer)
+  expect(_fetch.mock.calls[0][0]).toBe('endpoint1?keepAlive=true')
+  expect(_fetch.mock.calls[0][1]).toEqual({ headers: { authorization: `Bearer idToken` } })
+  expect(_fetch.mock.calls[1][0]).toBe('endpoint2?keepAlive=true')
+  expect(_fetch.mock.calls[1][1]).toEqual({ headers: { authorization: `Bearer idToken` } })
+  expect(timer).toBeDefined()
 })
