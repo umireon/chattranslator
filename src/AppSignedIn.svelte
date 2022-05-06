@@ -60,7 +60,7 @@
   const initializeTwitch = async (context: AppContext) => {
     const token = await getTwitchToken(db, user)
     if (typeof token === 'undefined') return
-    const login = await getTwitchLogin(context, token).catch(e => {
+    const login = await getTwitchLogin(context, token).catch((e) => {
       if (e instanceof Error) {
         error = e
       }
