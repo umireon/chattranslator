@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Language snapshot 1`] = `
+<body>
+  <div>
+    <main>
+      <p>
+        <label
+          for="targetLanguage"
+        >
+          Target Language
+        </label>
+         
+        <input
+          id="targetLanguage"
+          type="text"
+        />
+      </p>
+    </main>
+  </div>
+</body>
+`;
