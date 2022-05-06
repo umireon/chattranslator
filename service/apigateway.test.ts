@@ -1,4 +1,4 @@
-import { getUidFromBase64 } from "./apigateway"
+import { getUidFromBase64 } from './apigateway'
 
 test('getUidFromBase64 returns sub from base64 JWT', () => {
   const jwt = { sub: 'uid' }

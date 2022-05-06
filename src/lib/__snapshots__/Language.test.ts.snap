@@ -13,8 +13,53 @@ exports[`Language snapshot 1`] = `
          
         <input
           id="targetLanguage"
+          list="targetLanguageList"
           type="text"
         />
+         
+        <datalist
+          id="targetLanguageList"
+        >
+          <option
+            value="de"
+          />
+          <option
+            value="en"
+          />
+          <option
+            value="es"
+          />
+          <option
+            value="fr"
+          />
+          <option
+            value="it"
+          />
+          <option
+            value="ja"
+          />
+          <option
+            value="ko"
+          />
+          <option
+            value="pl"
+          />
+          <option
+            value="pt"
+          />
+          <option
+            value="ru"
+          />
+          <option
+            value="th"
+          />
+          <option
+            value="tr"
+          />
+          <option
+            value="zh"
+          />
+        </datalist>
       </p>
     </main>
   </div>

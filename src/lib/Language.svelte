@@ -9,21 +9,26 @@
 <main>
   <p>
     <label for="targetLanguage">Target Language</label>
-    <input id="targetLanguage" list="targetLanguageList" type="text" bind:value={targetLanguageCode} />
+    <input
+      id="targetLanguage"
+      list="targetLanguageList"
+      type="text"
+      bind:value={targetLanguageCode}
+    />
     <datalist id="targetLanguageList">
-      <option value="de"></option>
-      <option value="en"></option>
-      <option value="es"></option>
-      <option value="fr"></option>
-      <option value="it"></option>
-      <option value="ja"></option>
-      <option value="ko"></option>
-      <option value="pl"></option>
-      <option value="pt"></option>
-      <option value="ru"></option>
-      <option value="th"></option>
-      <option value="tr"></option>
-      <option value="zh"></option>
+      <option value="de" />
+      <option value="en" />
+      <option value="es" />
+      <option value="fr" />
+      <option value="it" />
+      <option value="ja" />
+      <option value="ko" />
+      <option value="pl" />
+      <option value="pt" />
+      <option value="ru" />
+      <option value="th" />
+      <option value="tr" />
+      <option value="zh" />
     </datalist>
   </p>
 </main>

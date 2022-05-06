@@ -1,6 +1,6 @@
 import type { Request, Response } from '@google-cloud/functions-framework'
 
-import { handleCors } from "./cors"
+import { handleCors } from './cors'
 
 test('handleCors sends allowance for localhost', () => {
   const req = {
@@ -10,7 +10,7 @@ test('handleCors sends allowance for localhost', () => {
       } else {
         return ''
       }
-    }
+    },
   } as unknown as Request
   const set = jest.fn()
   const res = { set } as unknown as Response
@@ -28,7 +28,7 @@ test('handleCors sends allowance for chattranslatorbot.web.app', () => {
       } else {
         return ''
       }
-    }
+    },
   } as unknown as Request
   const set = jest.fn()
   const res = { set } as unknown as Response
@@ -47,7 +47,7 @@ test('handleCors sends preflight response and terminates request', () => {
         return ''
       }
     },
-    method: 'OPTIONS'
+    method: 'OPTIONS',
   } as unknown as Request
   const set = jest.fn()
   const send = jest.fn()
