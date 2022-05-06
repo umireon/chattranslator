@@ -23,8 +23,8 @@
       for (let i = 0; i < AUTHENTICATE_MAX_RETRY; i++) {
         try {
           const credential = await authenticateWithToken(
-            auth,
             DEFAULT_CONTEXT,
+            auth,
             {
               token,
               uid,

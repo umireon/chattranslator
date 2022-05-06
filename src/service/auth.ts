@@ -8,8 +8,8 @@ interface AuthenticateWithTokenOptions {
 }
 
 export const authenticateWithToken = async (
-  auth: Auth,
   { authenticateWithTokenEndpoint }: AppContext,
+  auth: Auth,
   { token, uid }: AuthenticateWithTokenOptions,
   _fetch = fetch
 ) => {
