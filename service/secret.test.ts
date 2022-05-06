@@ -1,5 +1,6 @@
+import { SecretManagerServiceClient } from '@google-cloud/secret-manager';
 import * as util from 'util';
-import { coarseIntoString } from './secret'
+import { coarseIntoString, getTwitchOauthToken } from './secret'
 
 const _TextDecoder = util.TextDecoder as typeof TextDecoder
 
@@ -10,7 +11,14 @@ test('coarseIntoString converts Uint8Array into string', () => {
 })
 
 test('coarseIntoString does nothing with string', () => {
-  const string = 'A'
+  const string = 'string'
   const actual = coarseIntoString(string, _TextDecoder)
   expect(actual).toBe(string)
+})
+
+test('getTwitchOauthToken accesses Secret Manager', async () => {
+  const accessSecretVersion = jest.fn().mockResolvedValue([{ payload: { data: 'data' }}])
+  const client = { accessSecretVersion } as unknown as SecretManagerServiceClient
+  const actual = await getTwitchOauthToken(client, { projectId: 'projectId' }, _TextDecoder)
+  expect(actual).toBe('data')
 })

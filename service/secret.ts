@@ -23,7 +23,8 @@ export const getTwitchOauthToken = async (
     name = 'twitch-oauth-token',
     projectId,
     version = DEFAULT_TWITCH_OAUTH_TOKEN_VERSION,
-  }: GetTwitchOAuthTokenOption
+  }: GetTwitchOAuthTokenOption,
+  _TextDecoder = TextDecoder
 ) => {
   const [response] = await client.accessSecretVersion({
     name: `projects/${projectId}/secrets/${name}/versions/${version}`,
@@ -31,6 +32,6 @@ export const getTwitchOauthToken = async (
   if (!response.payload || !response.payload.data) {
     throw new Error('Invalid response')
   }
-  const data = coarseIntoString(response.payload.data)
+  const data = coarseIntoString(response.payload.data, _TextDecoder)
   return data
 }
