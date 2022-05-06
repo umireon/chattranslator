@@ -8,11 +8,11 @@ export interface GetTwitchOAuthTokenOption {
 
 export const DEFAULT_TWITCH_OAUTH_TOKEN_VERSION = '1'
 
-export const coarseIntoString = (data: Uint8Array | string): string => {
+export const coarseIntoString = (data: Uint8Array | string, _TextDecoder = TextDecoder): string => {
   if (typeof data === 'string') {
     return data
   } else {
-    const decoder = new TextDecoder()
+    const decoder = new _TextDecoder()
     return decoder.decode(data)
   }
 }
