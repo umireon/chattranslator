@@ -1,10 +1,10 @@
 import type { HttpFunction } from '@google-cloud/functions-framework'
 
 export const handleCors: HttpFunction = (req, res) => {
-  const { origin } = req.headers
+  const origin = req.get('Origin')
   if (typeof origin !== 'undefined') {
     const { hostname } = new URL(origin)
-    if (hostname === 'localhost') {
+    if (hostname.toLowerCase() === 'localhost') {
       res.set('Access-Control-Allow-Origin', '*')
     } else {
       res.set(
