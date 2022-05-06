@@ -5,6 +5,10 @@ import { signInWithCustomToken } from 'firebase/auth'
 
 jest.mock('firebase/auth')
 
+const mockedSignInWithCustomToken = signInWithCustomToken as jest.Mock<
+  Promise<UserCredential>
+>
+
 test('authenticateWithToken returns UserCredential', async () => {
   const context = { authenticateWithTokenEndpoint: 'endpoint' } as AppContext
   const auth = {} as Auth
@@ -14,9 +18,6 @@ test('authenticateWithToken returns UserCredential', async () => {
   const responseText = jest.fn().mockResolvedValue(customToken)
   const response = { ok: true, text: responseText }
   const _fetch = jest.fn().mockResolvedValue(response)
-  const mockedSignInWithCustomToken = signInWithCustomToken as jest.Mock<
-    Promise<UserCredential>
-  >
   const credential = {} as UserCredential
   mockedSignInWithCustomToken.mockResolvedValue(credential)
   const actual = await authenticateWithToken(
