@@ -28,7 +28,7 @@ test('getTwitchOauthToken accesses Secret Manager', async () => {
     .mockResolvedValue([{ payload: { data: 'data' } }])
   const client = {
     accessSecretVersion,
-  } as unknown as SecretManagerServiceClient
+  } as unknown as InstanceType<typeof SecretManagerServiceClient>
   const actual = await getTwitchOauthToken(
     client,
     { projectId: 'projectId' },
