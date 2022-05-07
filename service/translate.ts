@@ -1,12 +1,19 @@
 import type {
-  TranslateTextOption,
+  TranslateTextGlossaryConfig,
   TranslateTextResult,
 } from '../common/translate'
 import { TranslationServiceClient } from '@google-cloud/translate'
 
+export interface TranslateTextParams {
+  readonly text: string
+  readonly glossaryConfig?: TranslateTextGlossaryConfig
+  readonly projectId: string
+  readonly targetLanguageCode: string
+}
+
 export const translateText = async (
   client: TranslationServiceClient,
-  { glossaryConfig, projectId, targetLanguageCode, text }: TranslateTextOption
+  { glossaryConfig, projectId, targetLanguageCode, text }: TranslateTextParams
 ): Promise<TranslateTextResult> => {
   const [response] = await client.translateText({
     contents: [text],
