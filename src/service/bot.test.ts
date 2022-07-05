@@ -6,9 +6,10 @@ test('sendTextFromBotToChat resolves if request succeeds', async () => {
   const context = {
     sendTextFromBotToChatEndpoint: 'endpoint',
   } as AppContext
+  const idToken = 'idToken'
   const user = {
     async getIdToken() {
-      return 'idToken'
+      return idToken
     },
   } as User
   const text = 'text'
@@ -16,6 +17,6 @@ test('sendTextFromBotToChat resolves if request succeeds', async () => {
   await sendTextFromBotToChat(context, user, { text }, _fetch)
   expect(_fetch.mock.calls[0][0]).toBe('endpoint?text=text')
   expect(_fetch.mock.calls[0][1]).toEqual({
-    headers: { authorization: `Bearer idToken` },
+    headers: { authorization: `Bearer ${idToken}` },
   })
 })
