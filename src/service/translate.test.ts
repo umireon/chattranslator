@@ -30,7 +30,7 @@ test('translateText returns a translated text', async () => {
     'endpoint?targetLanguageCode=lang&text=text'
   )
   expect(_fetch.mock.calls[0][1]).toEqual({
-    headers: { authorization: `Bearer idToken` },
+    headers: { authorization: 'Bearer idToken' },
   })
   expect(actual).toBe(expected)
 })
