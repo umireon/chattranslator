@@ -6,7 +6,7 @@ test('translateText returns a translated text', async () => {
   const context = {
     translateTextEndpoint: 'endpoint',
   } as AppContext
-  const idToken = 'idToken'
+  const idToken = Math.random().toString()
   const user = {
     async getIdToken() {
       return idToken

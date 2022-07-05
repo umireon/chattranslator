@@ -6,7 +6,7 @@ test('sendTextFromBotToChat resolves if request succeeds', async () => {
   const context = {
     sendTextFromBotToChatEndpoint: 'endpoint',
   } as AppContext
-  const idToken = 'idToken'
+  const idToken = Math.random().toString()
   const user = {
     async getIdToken() {
       return idToken

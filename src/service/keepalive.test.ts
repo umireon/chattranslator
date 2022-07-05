@@ -2,7 +2,7 @@ import type { User } from 'firebase/auth'
 import { setKeepAliveInterval } from './keepalive'
 
 test('setKeepAliveInterval sends requests immediately adn sets interval', async () => {
-  const idToken = 'idToken'
+  const idToken = Math.random().toString()
   const user = {
     async getIdToken() {
       return idToken

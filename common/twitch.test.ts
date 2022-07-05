@@ -14,7 +14,7 @@ test('validateTwitchUsersResponse validates the response', async () => {
 test('getTwitchLogin returns login from the response', async () => {
   const twitchClientId = 'clientId'
   const context = { twitchClientId } as AppContext
-  const token = 'token'
+  const token = Math.random().toString()
   const login = 'login'
   const _fetch = jest.fn().mockImplementation((input, init) => {
     expect(input).toBe(TWITCH_USERS_ENDPOINT)
