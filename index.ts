@@ -46,7 +46,7 @@ http('translate-text', async (req, res) => {
   const translationClient = new TranslationServiceClient()
   const response = await translateText(translationClient, {
     projectId: PROJECT_ID,
-    targetLanguageCode: targetLanguageCode,
+    targetLanguageCode,
     text,
   })
 

@@ -16,7 +16,7 @@
   async function handleClickGenerateUrl() {
     const { token } = await getUserData(db, user)
     if (typeof token !== 'undefined' && token !== null) {
-      const query = new URLSearchParams({ token: token, uid: user.uid })
+      const query = new URLSearchParams({ token, uid: user.uid })
       value = `${location.origin}${location.pathname}#${query}`
     } else {
       const buffer = new Uint8Array(256)
