@@ -3,11 +3,6 @@ import { getUserData, setUserData } from "./users";
 import type { Firestore } from "firebase/firestore";
 import type { User } from "firebase/auth";
 
-export const getTwitchToken = async (db: Firestore, user: User) => {
-  const data = await getUserData(db, user);
-  return data["twitch-access-token"];
-};
-
 export const setTwitchToken = async (
   db: Firestore,
   user: User,

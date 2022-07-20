@@ -1,4 +1,4 @@
-import { generateNonce, getTwitchToken, setTwitchToken } from "./oauth";
+import { generateNonce, setTwitchToken } from "./oauth";
 import { getUserData, setUserData } from "./users";
 
 import type { Firestore } from "firebase/firestore";
@@ -7,20 +7,9 @@ import type { UserData } from "./users";
 
 jest.mock("./users");
 
-const mockedGetUserData = getUserData as jest.Mock<Promise<UserData>>;
 const mockedSetUserData = setUserData as jest.Mock<Promise<void>>;
 
-test("getTwitchToken gets twitch-access-token", async () => {
-  const db = {} as Firestore;
-  const user = {} as User;
-  mockedGetUserData.mockResolvedValue({
-    "twitch-access-token": "token",
-  });
-  const token = await getTwitchToken(db, user);
-  expect(token).toBe("token");
-});
-
-test("setTwitchToken gets twitch-access-token", async () => {
+test("setTwitchToken sets twitch-access-token", async () => {
   const db = {} as Firestore;
   const user = {} as User;
   await setTwitchToken(db, user, "token");

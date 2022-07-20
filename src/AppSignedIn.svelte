@@ -13,7 +13,6 @@
   import type { UserData } from "./service/users";
   import { connectTwitch } from "./service/twitch";
   import { getTwitchLogin } from "../common/twitch";
-  import { getTwitchToken } from "./service/oauth";
   import { logEvent } from "firebase/analytics";
   import { sendTextFromBotToChat } from "./service/bot";
   import { setKeepAliveInterval } from "./service/keepalive";
@@ -58,14 +57,20 @@
   };
 
   const initializeTwitch = async (context: AppContext) => {
-    const token = await getTwitchToken(db, user);
-    if (typeof token === "undefined") return;
+    const token = initialUserData['twitch-access-token'];
+    if (typeof token === "undefined") {
+      error = new Error('Token was undefined!');
+      return;
+    }
     const login = await getTwitchLogin(context, token).catch((e) => {
       if (e instanceof Error) {
         error = e;
       }
     });
-    if (typeof login === "undefined") return;
+    if (typeof login === "undefined") {
+      error = new Error('Login was undefined!');
+      return;
+    }
     connectTwitch({ login, token }, translateChat);
   };
 
