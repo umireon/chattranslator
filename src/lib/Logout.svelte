@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { Auth } from 'firebase/auth'
+  import type { Auth } from "firebase/auth";
 
-  export let auth: Auth
+  export let auth: Auth;
 
   async function handleLogout() {
-    await auth.signOut()
-    location.href = '/'
+    await auth.signOut();
+    location.href = "/";
   }
 </script>
 
