@@ -12,5 +12,5 @@ export default {
     ],
     '^.+\\.tsx?$': '@swc/jest',
   },
-  transformIgnorePatterns: ["/node_modules/(?!@?firebase/)"]
+  transformIgnorePatterns: ['/node_modules/(?!@?firebase/)'],
 }
