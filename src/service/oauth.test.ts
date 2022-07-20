@@ -1,9 +1,8 @@
 import { generateNonce, setTwitchToken } from "./oauth";
-import { getUserData, setUserData } from "./users";
 
 import type { Firestore } from "firebase/firestore";
 import type { User } from "firebase/auth";
-import type { UserData } from "./users";
+import { setUserData } from "./users";
 
 jest.mock("./users");
 
