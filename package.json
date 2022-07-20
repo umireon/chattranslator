@@ -64,9 +64,9 @@
     "vite": "^3.0.2"
   },
   "dependencies": {
-    "@google-cloud/functions-framework": "^3.0.0",
-    "@google-cloud/secret-manager": "^3.12.0",
-    "@google-cloud/translate": "^6.3.1",
+    "@google-cloud/functions-framework": "^3.1.2",
+    "@google-cloud/secret-manager": "^4.0.0",
+    "@google-cloud/translate": "^7.0.0",
     "firebase-admin": "^11.0.0",
     "node-fetch": "^3.2.4",
     "tmi.js": "^1.8.5"
