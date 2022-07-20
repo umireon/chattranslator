@@ -1,9 +1,9 @@
 <script lang="ts" context="module">
-  export const defaultTargetLanguageCode = 'en'
+  export const defaultTargetLanguageCode = "en";
 </script>
 
 <script lang="ts">
-  export let targetLanguageCode: string
+  export let targetLanguageCode: string;
 </script>
 
 <main>

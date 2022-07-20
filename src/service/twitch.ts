@@ -1,18 +1,18 @@
-import type { ChatUserstate } from 'tmi.js'
-import { Client as TmiClient } from 'tmi.js'
+import type { ChatUserstate } from "tmi.js";
+import { Client as TmiClient } from "tmi.js";
 
 export interface ConnectTwitchParams {
-  login: string
-  token: string
+  login: string;
+  token: string;
 }
 
-export type ConnectTwitchCallback = (text: string, tags: ChatUserstate) => void
+export type ConnectTwitchCallback = (text: string, tags: ChatUserstate) => void;
 
 export const connectTwitch = async (
   params: ConnectTwitchParams,
   callback: ConnectTwitchCallback
 ) => {
-  const { login, token } = params
+  const { login, token } = params;
   const client = new TmiClient({
     channels: [login],
     connection: {
@@ -25,11 +25,11 @@ export const connectTwitch = async (
     },
     options: {
       debug: true,
-      messagesLogLevel: 'info',
+      messagesLogLevel: "info",
     },
-  })
-  await client.connect()
-  client.on('message', (channel, tags, message, self) => {
-    callback(message, tags)
-  })
-}
+  });
+  await client.connect();
+  client.on("message", (channel, tags, message, self) => {
+    callback(message, tags);
+  });
+};

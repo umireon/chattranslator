@@ -1,10 +1,10 @@
-import Language from './Language.svelte'
-import { render } from '@testing-library/svelte'
+import Language from "./Language.svelte";
+import { render } from "@testing-library/svelte";
 
-test('Language snapshot', () => {
+test("Language snapshot", () => {
   const props = {
-    targetLanguageCode: 'en',
-  }
-  const component = render(Language, { props })
-  expect(component.container).toMatchSnapshot()
-})
+    targetLanguageCode: "en",
+  };
+  const component = render(Language, { props });
+  expect(component.container).toMatchSnapshot();
+});

@@ -1,8 +1,8 @@
-import type { AppContext } from '../../common/constants'
-import type { User } from 'firebase/auth'
+import type { AppContext } from "../../common/constants";
+import type { User } from "firebase/auth";
 
 interface SendTextFromBotToChatParams {
-  readonly text: string
+  readonly text: string;
 }
 
 export const sendTextFromBotToChat = async (
@@ -11,16 +11,16 @@ export const sendTextFromBotToChat = async (
   { text }: SendTextFromBotToChatParams,
   _fetch = fetch
 ): Promise<void> => {
-  const idToken = await user.getIdToken()
-  const query = new URLSearchParams({ text })
+  const idToken = await user.getIdToken();
+  const query = new URLSearchParams({ text });
   const response = await _fetch(`${sendTextFromBotToChatEndpoint}?${query}`, {
     headers: {
       authorization: `Bearer ${idToken}`,
     },
-  })
+  });
   if (!response.ok) {
-    const text = await response.text()
-    console.error(text)
-    throw new Error('Invalid response')
+    const text = await response.text();
+    console.error(text);
+    throw new Error("Invalid response");
   }
-}
+};

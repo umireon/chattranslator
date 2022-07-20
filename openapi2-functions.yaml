@@ -1,123 +1,123 @@
-swagger: '2.0'
+swagger: "2.0"
 info:
-  title: 'chattranslatorbot backend'
-  description: 'API of chat message translator on Twitch for OBS and so on.'
-  version: '0.1.0'
+  title: "chattranslatorbot backend"
+  description: "API of chat message translator on Twitch for OBS and so on."
+  version: "0.1.0"
 schemes:
-  - 'https'
+  - "https"
 produces:
-  - 'application/json'
+  - "application/json"
 securityDefinitions:
   firebase:
-    authorizationUrl: ''
-    flow: 'implicit'
-    type: 'oauth2'
-    x-google-issuer: 'https://securetoken.google.com/chattranslatorbot'
-    x-google-jwks_uri: 'https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com'
-    x-google-audiences: 'chattranslatorbot'
+    authorizationUrl: ""
+    flow: "implicit"
+    type: "oauth2"
+    x-google-issuer: "https://securetoken.google.com/chattranslatorbot"
+    x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "chattranslatorbot"
 paths:
   /translate-text:
     get:
-      summary: 'Translate text'
-      operationId: 'translate-text'
+      summary: "Translate text"
+      operationId: "translate-text"
       x-google-backend:
-        address: 'https://translate-text-h7nyl2mmoq-uc.a.run.app'
+        address: "https://translate-text-h7nyl2mmoq-uc.a.run.app"
       security:
         - firebase: []
       parameters:
-        - in: 'query'
-          name: 'text'
-          type: 'string'
-        - in: 'query'
-          name: 'targetLanguageCode'
-          type: 'string'
+        - in: "query"
+          name: "text"
+          type: "string"
+        - in: "query"
+          name: "targetLanguageCode"
+          type: "string"
       responses:
-        '200':
-          description: 'A successful response'
+        "200":
+          description: "A successful response"
           schema:
-            type: 'object'
+            type: "object"
             properties:
               audioContent:
-                type: 'string'
+                type: "string"
               language:
-                type: 'string'
-        '204':
-          description: 'Keep Alive'
+                type: "string"
+        "204":
+          description: "Keep Alive"
     options:
-      summary: 'Translate text Preflight'
-      operationId: 'translate-text-preflight'
+      summary: "Translate text Preflight"
+      operationId: "translate-text-preflight"
       x-google-backend:
-        address: 'https://translate-text-h7nyl2mmoq-uc.a.run.app'
+        address: "https://translate-text-h7nyl2mmoq-uc.a.run.app"
       responses:
-        '204':
-          description: 'A successful response'
+        "204":
+          description: "A successful response"
 
   /send-text-from-bot-to-chat:
     get:
-      summary: 'Send text from bot to chat'
-      operationId: 'send-text-from-bot-to-chat'
+      summary: "Send text from bot to chat"
+      operationId: "send-text-from-bot-to-chat"
       x-google-backend:
-        address: 'https://send-text-from-bot-to-chat-h7nyl2mmoq-uc.a.run.app'
+        address: "https://send-text-from-bot-to-chat-h7nyl2mmoq-uc.a.run.app"
       security:
         - firebase: []
       parameters:
-        - in: 'query'
-          name: 'text'
-          type: 'string'
+        - in: "query"
+          name: "text"
+          type: "string"
       responses:
-        '204':
-          description: 'A successful response'
+        "204":
+          description: "A successful response"
     options:
-      summary: 'Send text from bot to chat preflight'
-      operationId: 'send-text-from-bot-to-chat-preflight'
+      summary: "Send text from bot to chat preflight"
+      operationId: "send-text-from-bot-to-chat-preflight"
       x-google-backend:
-        address: 'https://set-twitch-login-to-user-h7nyl2mmoq-uc.a.run.app'
+        address: "https://set-twitch-login-to-user-h7nyl2mmoq-uc.a.run.app"
       responses:
-        '204':
-          description: 'A successful response'
+        "204":
+          description: "A successful response"
 
   /set-twitch-login-to-user:
     get:
-      summary: 'Set Twitch login to user'
-      operationId: 'set-twitch-login-to-user'
+      summary: "Set Twitch login to user"
+      operationId: "set-twitch-login-to-user"
       x-google-backend:
-        address: 'https://set-twitch-login-to-user-h7nyl2mmoq-uc.a.run.app'
+        address: "https://set-twitch-login-to-user-h7nyl2mmoq-uc.a.run.app"
       security:
         - firebase: []
       parameters:
-        - in: 'query'
-          name: 'token'
-          type: 'string'
-        - in: 'query'
-          name: 'uid'
-          type: 'string'
+        - in: "query"
+          name: "token"
+          type: "string"
+        - in: "query"
+          name: "uid"
+          type: "string"
       responses:
-        '204':
-          description: 'A successful response'
+        "204":
+          description: "A successful response"
     options:
-      summary: 'Set Twitch login to user Preflight'
-      operationId: 'set-twitch-login-to-user-preflight'
+      summary: "Set Twitch login to user Preflight"
+      operationId: "set-twitch-login-to-user-preflight"
       x-google-backend:
-        address: 'https://set-twitch-login-to-user-h7nyl2mmoq-uc.a.run.app'
+        address: "https://set-twitch-login-to-user-h7nyl2mmoq-uc.a.run.app"
       responses:
-        '204':
-          description: 'A successful response'
+        "204":
+          description: "A successful response"
 
   /authenticate-with-token:
     get:
-      summary: 'Authenticate with token'
-      operationId: 'authenticate-with-token'
+      summary: "Authenticate with token"
+      operationId: "authenticate-with-token"
       x-google-backend:
-        address: 'https://authenticate-with-token-h7nyl2mmoq-uc.a.run.app'
+        address: "https://authenticate-with-token-h7nyl2mmoq-uc.a.run.app"
       parameters:
-        - in: 'query'
-          name: 'token'
-          type: 'string'
-        - in: 'query'
-          name: 'uid'
-          type: 'string'
+        - in: "query"
+          name: "token"
+          type: "string"
+        - in: "query"
+          name: "uid"
+          type: "string"
       responses:
-        '200':
-          description: 'A successful response'
+        "200":
+          description: "A successful response"
           schema:
-            type: 'string'
+            type: "string"
