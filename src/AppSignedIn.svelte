@@ -37,9 +37,9 @@
 
   let error: Error | undefined;
 
-  let twitchLogin: string = ''
-  let twitchText: string = ''
-  let twitchTranslatedText: string = ''
+  let twitchLogin: string = "";
+  let twitchText: string = "";
+  let twitchTranslatedText: string = "";
 
   export const translateChat = async (text: string, tags: ChatUserstate) => {
     if (tags.username === context.botUsername) {
@@ -63,9 +63,9 @@
   };
 
   const initializeTwitch = async (context: AppContext) => {
-    const token = initialUserData['twitch-access-token'];
+    const token = initialUserData["twitch-access-token"];
     if (typeof token === "undefined") {
-      error = new Error('Token was undefined!');
+      error = new Error("Token was undefined!");
       return;
     }
     const login = await getTwitchLogin(context, token).catch((e) => {
@@ -74,10 +74,10 @@
       }
     });
     if (typeof login === "undefined") {
-      error = new Error('Login was undefined!');
+      error = new Error("Login was undefined!");
       return;
     }
-    twitchLogin = login
+    twitchLogin = login;
     connectTwitch({ login, token }, translateChat);
   };
 
