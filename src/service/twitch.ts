@@ -29,7 +29,7 @@ export const connectTwitch = async (
     },
   });
   await client.connect();
-  client.on("message", (channel, tags, message, self) => {
+  client.on("message", (_1, tags, message, _2) => {
     callback(message, tags);
   });
 };
