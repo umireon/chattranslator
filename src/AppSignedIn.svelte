@@ -41,6 +41,12 @@
   let twitchText: string = "";
   let twitchTranslatedText: string = "";
 
+  export const unescapeHtmlEntities = (text: string): string => {
+    const domparser = new DOMParser()
+    const doc = domparser.parseFromString(text, 'text/html')
+    return doc.body.innerText
+  }
+
   export const translateChat = async (text: string, tags: ChatUserstate) => {
     if (tags.username === context.botUsername) {
       return;
@@ -57,8 +63,9 @@
     );
     if (detectedLanguageCode !== targetLanguageCode) {
       logEvent(analytics, "chat_translated");
-      twitchTranslatedText = translatedText;
-      await sendTextFromBotToChat(context, user, { text: translatedText });
+      const unescapedTranslatedText = unescapeHtmlEntities(translatedText)
+      twitchTranslatedText = unescapedTranslatedText;
+      await sendTextFromBotToChat(context, user, { text: unescapedTranslatedText });
     }
   };
 
