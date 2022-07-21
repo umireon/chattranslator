@@ -37,11 +37,16 @@
 
   let error: Error | undefined;
 
+  let twitchLogin: string = ''
+  let twitchText: string = ''
+  let twitchTranslatedText: string = ''
+
   export const translateChat = async (text: string, tags: ChatUserstate) => {
     if (tags.username === context.botUsername) {
       return;
     }
 
+    twitchText = text;
     const { detectedLanguageCode, translatedText } = await translateText(
       context,
       user,
@@ -52,6 +57,7 @@
     );
     if (detectedLanguageCode !== targetLanguageCode) {
       logEvent(analytics, "chat_translated");
+      twitchTranslatedText = translatedText;
       await sendTextFromBotToChat(context, user, { text: translatedText });
     }
   };
@@ -71,6 +77,7 @@
       error = new Error('Login was undefined!');
       return;
     }
+    twitchLogin = login
     connectTwitch({ login, token }, translateChat);
   };
 
@@ -88,6 +95,8 @@
   {/if}
   <Language bind:targetLanguageCode />
   <Connect {context} {db} {user} />
+  <div>Listening to #{twitchLogin}</div>
+  <div>{twitchText} → {twitchTranslatedText}</div>
   <GenerateUrl {db} {user} />
   <Logout {auth} />
 </main>
