@@ -19,7 +19,7 @@ const corsSet = (_1: string, _2: string) => {};
 
 test("setTwitchLoginToUser sets Twitch login to Firestore", async () => {
   const login = "login";
-  const token = Math.random().toString();
+  const token = crypto.randomUUID();
   const uid = "uid";
   const idToken = Buffer.from(
     JSON.stringify({
@@ -73,7 +73,7 @@ test("setTwitchLoginToUser sets Twitch login to Firestore", async () => {
 
 test("authenticateWithToken creates a custom token", async () => {
   const customToken = "customToken";
-  const token = Math.random().toString();
+  const token = crypto.randomUUID()
   const uid = "uid";
 
   const req = {
@@ -108,7 +108,7 @@ test("authenticateWithToken creates a custom token", async () => {
 
 test("authenticateWithToken rejects an invalid token", async () => {
   const customToken = "customToken";
-  const token = Math.random().toString();
+  const token = crypto.randomUUID();
   const invalidToken = "invalidToken";
   const uid = "uid";
 
