@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Chat message translator on Twitch for OBS and so on.",
   "scripts": {
-    "build-functions": "esbuild --outdir=. common/*.ts index.ts service/*.ts",
+    "build-functions": "esbuild --outdir=. common/*.ts index.ts handlers.ts service/*.ts",
     "build": "vite build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "dev": "vite",
