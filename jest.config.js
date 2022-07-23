@@ -2,7 +2,7 @@ export default {
   moduleFileExtensions: ["js", "svelte", "ts"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
-    "node-fetch": "<rootDir>/__mocks__/nodeFetchMock"
+    "node-fetch": "<rootDir>/__mocks__/nodeFetchMock",
   },
   testEnvironment: "jsdom",
   transform: {
