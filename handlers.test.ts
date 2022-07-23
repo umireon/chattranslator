@@ -4,7 +4,7 @@ import { authenticateWithToken, setTwitchLoginToUser } from "./handlers.js";
 import { type App } from "firebase-admin/app";
 import { type Auth } from "firebase-admin/auth";
 import { type Firestore } from "firebase-admin/firestore";
-import crypto from 'crypto'
+import crypto from "crypto";
 
 const app = {} as App;
 
@@ -74,7 +74,7 @@ test("setTwitchLoginToUser sets Twitch login to Firestore", async () => {
 
 test("authenticateWithToken creates a custom token", async () => {
   const customToken = "customToken";
-  const token = crypto.randomUUID()
+  const token = crypto.randomUUID();
   const uid = "uid";
 
   const req = {

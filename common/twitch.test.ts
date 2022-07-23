@@ -5,6 +5,7 @@ import {
 } from "./twitch";
 
 import type { AppContext } from "./constants";
+import crypto from "crypto";
 
 test("validateTwitchUsersResponse validates the response", async () => {
   const json = { data: [{ login: "" }] };
@@ -14,7 +15,7 @@ test("validateTwitchUsersResponse validates the response", async () => {
 test("getTwitchLogin returns login from the response", async () => {
   const twitchClientId = "clientId";
   const context = { twitchClientId } as AppContext;
-  const token = Math.random().toString();
+  const token = crypto.randomUUID();
   const login = "login";
   const _fetch = jest.fn().mockReturnValue({
     async json() {
