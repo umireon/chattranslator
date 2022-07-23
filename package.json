@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Chat message translator on Twitch for OBS and so on.",
   "scripts": {
-    "build-functions": "swc --out-dir=. common/*.ts index.ts handlers.ts service/*.ts",
+    "build-functions": "swc --out-dir=. *.ts && swc --out-dir=common common/*.ts && swc --out-dir=service service/*.ts",
     "build": "vite build",
     "check": "svelte-check --tsconfig ./tsconfig.json",
     "dev": "vite",
@@ -26,6 +26,7 @@
   "homepage": "https://github.com/umireon/chattranslatorbot#readme",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.0.1",
+    "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.218",
     "@swc/jest": "^0.2.22",
     "@testing-library/svelte": "^3.1.3",
