@@ -1,8 +1,9 @@
 import type { User } from "firebase/auth";
+import crypto from 'crypto'
 import { setKeepAliveInterval } from "./keepalive";
 
 test("setKeepAliveInterval sends requests immediately adn sets interval", async () => {
-  const idToken = Math.random().toString();
+  const idToken = crypto.randomUUID();
   const user = {
     async getIdToken() {
       return idToken;

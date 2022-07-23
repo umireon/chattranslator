@@ -4,6 +4,7 @@ import { authenticateWithToken, setTwitchLoginToUser } from "./handlers.js";
 import { type App } from "firebase-admin/app";
 import { type Auth } from "firebase-admin/auth";
 import { type Firestore } from "firebase-admin/firestore";
+import crypto from 'crypto'
 
 const app = {} as App;
 
