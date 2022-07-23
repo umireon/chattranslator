@@ -1,3 +1,9 @@
+import {
+  type Request,
+  type Response,
+  http,
+} from "@google-cloud/functions-framework";
+
 import { DEFAULT_CONTEXT } from "./common/constants.js";
 import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { Client as TmiClient } from "tmi.js";
@@ -8,7 +14,6 @@ import { getTwitchLogin } from "./common/twitch.js";
 import { getTwitchOauthToken } from "./service/secret.js";
 import { getUidFromBase64 } from "./service/apigateway.js";
 import { handleCors } from "./service/cors.js";
-import { http } from "@google-cloud/functions-framework";
 import { initializeApp } from "firebase-admin/app";
 import nodeFetch from "node-fetch";
 import { translateText } from "./service/translate.js";
@@ -145,11 +150,13 @@ http("set-twitch-login-to-user", async (req, res) => {
   res.status(204).send("");
 });
 
-http("authenticate-with-token", async (req, res) => {
+export const authenticateWithToken = async (
+  req: Request,
+  res: Response,
+  auth = getAuth(app),
+  db = getFirestore(app)
+) => {
   if (!handleCors(req, res)) return;
-
-  const auth = getAuth(app);
-  const db = getFirestore(app);
 
   // Validate query
   if (typeof req.query.token !== "string") {
@@ -176,4 +183,6 @@ http("authenticate-with-token", async (req, res) => {
   // Generate custom token
   const customToken = await auth.createCustomToken(uid);
   res.send(customToken);
-});
+};
+
+http("authenticate-with-token", authenticateWithToken);
