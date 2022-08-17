@@ -8,7 +8,7 @@ export interface TranslateTextParams {
 }
 
 export const translateText = async (
-  { translateTextEndpoint }: AppContext,
+  { translateTextEndpoint }: Pick<AppContext, "translateTextEndpoint">,
   user: User,
   { targetLanguageCode, text }: TranslateTextParams,
   _fetch = fetch

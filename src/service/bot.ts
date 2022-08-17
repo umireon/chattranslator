@@ -6,7 +6,9 @@ interface SendTextFromBotToChatParams {
 }
 
 export const sendTextFromBotToChat = async (
-  { sendTextFromBotToChatEndpoint }: AppContext,
+  {
+    sendTextFromBotToChatEndpoint,
+  }: Pick<AppContext, "sendTextFromBotToChatEndpoint">,
   user: User,
   { text }: SendTextFromBotToChatParams,
   _fetch = fetch
