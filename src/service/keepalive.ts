@@ -1,4 +1,4 @@
-import type { User } from "firebase/auth";
+import { type User } from "firebase/auth";
 
 export const setKeepAliveInterval = async (
   user: User,

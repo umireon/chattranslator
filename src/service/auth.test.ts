@@ -1,6 +1,10 @@
-import type { Auth, UserCredential } from "firebase/auth";
+import {
+  type Auth,
+  type UserCredential,
+  signInWithCustomToken,
+} from "firebase/auth";
+
 import { authenticateWithToken } from "./auth";
-import { signInWithCustomToken } from "firebase/auth";
 
 jest.mock("firebase/auth");
 

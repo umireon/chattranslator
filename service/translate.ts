@@ -2,6 +2,7 @@ import type {
   TranslateTextGlossaryConfig,
   TranslateTextResult,
 } from "../common/translate";
+
 import { TranslationServiceClient } from "@google-cloud/translate";
 
 export interface TranslateTextParams {

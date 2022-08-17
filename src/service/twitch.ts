@@ -1,5 +1,4 @@
-import type { ChatUserstate } from "tmi.js";
-import { Client as TmiClient } from "tmi.js";
+import { type ChatUserstate, Client as TmiClient } from "tmi.js";
 
 export interface ConnectTwitchParams {
   login: string;
