@@ -1,4 +1,3 @@
-import type { AppContext } from "../../common/constants";
 import type { User } from "firebase/auth";
 import crypto from "crypto";
 import { sendTextFromBotToChat } from "./bot";
@@ -6,7 +5,7 @@ import { sendTextFromBotToChat } from "./bot";
 test("sendTextFromBotToChat resolves if request succeeds", async () => {
   const context = {
     sendTextFromBotToChatEndpoint: "endpoint",
-  } as AppContext;
+  };
   const idToken = crypto.randomUUID();
   const user = {
     async getIdToken() {

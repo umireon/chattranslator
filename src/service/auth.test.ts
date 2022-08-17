@@ -1,5 +1,4 @@
 import type { Auth, UserCredential } from "firebase/auth";
-import type { AppContext } from "../../common/constants";
 import { authenticateWithToken } from "./auth";
 import { signInWithCustomToken } from "firebase/auth";
 
@@ -10,7 +9,7 @@ const mockedSignInWithCustomToken = signInWithCustomToken as jest.Mock<
 >;
 
 test("authenticateWithToken returns UserCredential", async () => {
-  const context = { authenticateWithTokenEndpoint: "endpoint" } as AppContext;
+  const context = { authenticateWithTokenEndpoint: "endpoint" };
   const auth = {} as Auth;
   const token = "token";
   const uid = "uid";
