@@ -1,22 +1,19 @@
 <script lang="ts">
-  import type { Auth, User } from "firebase/auth";
+  import { type Analytics, logEvent } from "firebase/analytics";
+  import { type AppContext, DEFAULT_CONTEXT } from "../common/constants";
+  import { type Auth, type User } from "firebase/auth";
   import Language, { defaultTargetLanguageCode } from "./lib/Language.svelte";
+  import { type UserData, setUserData } from "./service/users";
 
-  import type { Analytics } from "firebase/analytics";
-  import type { AppContext } from "../common/constants";
-  import type { ChatUserstate } from "tmi.js";
+  import { type ChatUserstate } from "tmi.js";
   import Connect from "./lib/Connect.svelte";
-  import { DEFAULT_CONTEXT } from "../common/constants";
-  import type { Firestore } from "firebase/firestore";
+  import { type Firestore } from "firebase/firestore";
   import GenerateUrl from "./lib/GenerateUrl.svelte";
   import Logout from "./lib/Logout.svelte";
-  import type { UserData } from "./service/users";
   import { connectTwitch } from "./service/twitch";
   import { getTwitchLogin } from "../common/twitch";
-  import { logEvent } from "firebase/analytics";
   import { sendTextFromBotToChat } from "./service/bot";
   import { setKeepAliveInterval } from "./service/keepalive";
-  import { setUserData } from "./service/users";
   import { translateText } from "./service/translate";
 
   import "three-dots/dist/three-dots.min.css";

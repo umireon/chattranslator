@@ -1,5 +1,5 @@
-import type { Firestore } from "firebase/firestore";
-import type { User } from "firebase/auth";
+import { type Firestore } from "firebase/firestore";
+import { type User } from "firebase/auth";
 import { setUserData } from "./users";
 
 export const setTwitchToken = async (

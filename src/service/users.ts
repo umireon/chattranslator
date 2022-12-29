@@ -5,7 +5,7 @@ import type {
 } from "firebase/firestore";
 import { collection, doc, getDoc, setDoc } from "firebase/firestore";
 
-import type { User } from "firebase/auth";
+import { type User } from "firebase/auth";
 
 export interface UserData {
   readonly nonce?: string;

@@ -1,4 +1,4 @@
-import type { User } from "firebase/auth";
+import { type User } from "firebase/auth";
 import crypto from "crypto";
 import { sendTextFromBotToChat } from "./bot";
 

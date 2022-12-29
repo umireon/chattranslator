@@ -1,4 +1,4 @@
-import type { Request, Response } from "@google-cloud/functions-framework";
+import { type Request, type Response } from "@google-cloud/functions-framework";
 
 import { handleCors } from "./cors";
 

@@ -1,5 +1,4 @@
-import type { UserData } from "./users";
-import { extractUserData } from "./users";
+import { type UserData, extractUserData } from "./users";
 
 test("extractUserData extracts everything from a valid UserData", () => {
   const userData: UserData = {

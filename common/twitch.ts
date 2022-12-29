@@ -17,7 +17,7 @@ export const validateTwitchUsersResponse = (
 export const TWITCH_USERS_ENDPOINT = "https://api.twitch.tv/helix/users";
 
 export const getTwitchLogin = async (
-  { twitchClientId }: AppContext,
+  { twitchClientId }: Pick<AppContext, "twitchClientId">,
   token: string,
   _fetch = fetch
 ): Promise<string> => {
