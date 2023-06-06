@@ -58,7 +58,7 @@
     "three-dots": "^0.2.3",
     "tslib": "^2.4.0",
     "typescript": "^4.7.4",
-    "vite": "^3.0.2"
+    "vite": "^3.2.7"
   },
   "dependencies": {
     "@google-cloud/functions-framework": "^3.1.2",
